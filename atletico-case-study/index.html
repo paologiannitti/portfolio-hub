@@ -1149,6 +1149,317 @@
                 width: 100vw;
             }
         }
+
+        /* Mobile Responsive Styles */
+        @media (max-width: 1024px) {
+            .page {
+                padding: 2rem;
+                min-height: auto;
+                height: auto;
+            }
+
+            .cover {
+                padding-left: 2rem;
+            }
+
+            .cover h1 {
+                font-size: 5rem;
+            }
+
+            .page-header h2 {
+                font-size: 2.5rem;
+            }
+
+            .content {
+                flex-direction: column;
+                gap: 2rem;
+            }
+
+            .ecosystem-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .studios-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .journeys {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .financial-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-page {
+                padding-left: 2rem;
+            }
+
+            .info-bar {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page {
+                padding: 1.5rem;
+                padding-bottom: 3rem;
+            }
+
+            .cover {
+                padding-left: 1.5rem;
+                justify-content: flex-start;
+                padding-top: 3rem;
+            }
+
+            .cover h1 {
+                font-size: 3rem;
+                max-width: 100%;
+            }
+
+            .cover-subtitle {
+                font-size: 1.5rem;
+            }
+
+            .cover-logo {
+                width: 70px;
+            }
+
+            .page-number {
+                font-size: 2.5rem;
+                right: 1.5rem;
+                bottom: 1rem;
+            }
+
+            .page-header {
+                margin-bottom: 1.5rem;
+            }
+
+            .page-header::before {
+                left: -1.5rem;
+                width: 3px;
+            }
+
+            .page-header h2 {
+                font-size: 1.75rem;
+            }
+
+            .page-header .subtitle {
+                font-size: 0.8rem;
+            }
+
+            .stat-large {
+                font-size: 5rem;
+            }
+
+            .points li {
+                font-size: 0.9rem;
+                padding-left: 1.5rem;
+            }
+
+            .calendar-heatmap {
+                grid-template-columns: repeat(26, 1fr);
+                padding: 1rem;
+            }
+
+            .ecosystem-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 0.75rem;
+            }
+
+            .ecosystem-item {
+                padding: 1rem;
+            }
+
+            .ecosystem-item::after {
+                display: none;
+            }
+
+            .ecosystem-icon {
+                font-size: 1.25rem;
+            }
+
+            .ecosystem-name {
+                font-size: 0.9rem;
+            }
+
+            .ecosystem-desc {
+                font-size: 0.6rem;
+            }
+
+            .ecosystem-question {
+                font-size: 1rem;
+                padding: 1rem;
+            }
+
+            .architecture {
+                gap: 0.25rem;
+            }
+
+            .arch-layer {
+                padding: 1rem;
+                max-width: 100%;
+            }
+
+            .arch-title {
+                font-size: 1.1rem;
+            }
+
+            .arch-desc {
+                font-size: 0.65rem;
+            }
+
+            .flow {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+
+            .flow-step {
+                width: 100%;
+            }
+
+            .logic-table th,
+            .logic-table td {
+                padding: 0.5rem;
+                font-size: 0.75rem;
+            }
+
+            .studios-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .studios-card.featured {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .stats-row {
+                grid-template-columns: 1fr 1fr;
+                gap: 0.5rem;
+            }
+
+            .stat-box {
+                padding: 0.75rem;
+            }
+
+            .stat-box-value {
+                font-size: 1.25rem;
+            }
+
+            .stat-box-label {
+                font-size: 0.55rem;
+            }
+
+            .journey-card {
+                padding: 1rem;
+            }
+
+            .journey-name {
+                font-size: 1.25rem;
+            }
+
+            .journey-step {
+                font-size: 0.75rem;
+            }
+
+            .comparison-header,
+            .comparison-row {
+                grid-template-columns: 1.5fr 1fr 1fr;
+            }
+
+            .comparison-header > div,
+            .comparison-row > div {
+                padding: 0.5rem;
+                font-size: 0.7rem;
+            }
+
+            .comparison-stat-value {
+                font-size: 2.5rem;
+            }
+
+            .contact-page {
+                padding-left: 1.5rem;
+            }
+
+            .contact-title {
+                font-size: 2.5rem;
+            }
+
+            .contact-bio {
+                font-size: 0.95rem;
+            }
+
+            .contact-links {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .contact-link {
+                text-align: center;
+            }
+
+            .bg-orb {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .cover h1 {
+                font-size: 2.25rem;
+            }
+
+            .cover-subtitle {
+                font-size: 1.1rem;
+                margin-bottom: 2rem;
+            }
+
+            .cover-author {
+                font-size: 0.75rem;
+                padding: 0.5rem 1rem;
+            }
+
+            .page-header h2 {
+                font-size: 1.4rem;
+            }
+
+            .stat-large {
+                font-size: 3.5rem;
+            }
+
+            .stat-label {
+                font-size: 0.75rem;
+            }
+
+            .calendar-heatmap {
+                grid-template-columns: repeat(13, 1fr);
+            }
+
+            .calendar-legend {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .ecosystem-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-row {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-title {
+                font-size: 2rem;
+            }
+        }
     </style>
 </head>
 <body>
