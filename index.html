@@ -1104,6 +1104,46 @@
             .glass-streak {
                 display: none;
             }
+
+            /* Fix stat cards on mobile */
+            .about-stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.75rem;
+            }
+
+            .stat-card {
+                padding: 1.25rem 0.75rem;
+            }
+
+            .stat-value {
+                font-size: 2rem;
+            }
+
+            .stat-label {
+                font-size: 0.65rem;
+                letter-spacing: 0.03em;
+                word-wrap: break-word;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .about-stats {
+                grid-template-columns: 1fr 1fr;
+                gap: 0.5rem;
+            }
+
+            .stat-card {
+                padding: 1rem 0.5rem;
+            }
+
+            .stat-value {
+                font-size: 1.75rem;
+            }
+
+            .stat-label {
+                font-size: 0.6rem;
+                letter-spacing: 0.02em;
+            }
         }
     </style>
 </head>
