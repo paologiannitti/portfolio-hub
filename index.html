@@ -54,15 +54,16 @@
             pointer-events: none;
             z-index: 0;
             overflow: hidden;
-            filter: url(#goo);
         }
 
         .blob {
             position: absolute;
             border-radius: 50%;
-            filter: blur(60px);
-            opacity: 0.7;
-            mix-blend-mode: screen;
+            filter: blur(80px);
+            opacity: 0.6;
+            will-change: transform;
+            transform: translateZ(0);
+            backface-visibility: hidden;
         }
 
         /* Primary Purple Blob */
@@ -1132,14 +1133,6 @@
                 align-items: center;
             }
 
-            .ribbon-wave, .ribbon-wave-2, .ribbon-wave-3 {
-                filter: blur(40px);
-            }
-
-            .glass-streak {
-                display: none;
-            }
-
             /* Fix stat cards on mobile */
             .about-stats {
                 grid-template-columns: repeat(2, 1fr);
@@ -1179,21 +1172,40 @@
                 font-size: 0.6rem;
                 letter-spacing: 0.02em;
             }
+
+            /* Performance: disable heavy animations on mobile */
+            .blob {
+                animation-duration: 60s !important;
+                filter: blur(120px);
+            }
+            .blob-4, .blob-5 {
+                display: none;
+            }
+            .particles {
+                display: none;
+            }
+            .mesh-gradient {
+                animation: none;
+            }
+        }
+
+        /* Reduced motion for accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            .blob, .particles, .mesh-gradient {
+                animation: none !important;
+            }
+            .particles {
+                display: none;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- SVG Filter for Gooey Blob Effect -->
-    <svg style="position: absolute; width: 0; height: 0;">
-        <defs>
-            <filter id="goo">
-                <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
-                <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9" result="goo" />
-                <feComposite in="SourceGraphic" in2="goo" operator="atop"/>
-            </filter>
-        </defs>
-    </svg>
-
     <!-- Google-Style Animated Blob Mesh Background -->
     <div class="blob-container">
         <div class="blob blob-1"></div>
