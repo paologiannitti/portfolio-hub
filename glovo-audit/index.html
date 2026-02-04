@@ -1,0 +1,1951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glovo Brand Audit | Paolo Giannitti</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Glovo Brand Colors - Vibrant Path Perspective */
+            --glovo-yellow: #FFD100;
+            --glovo-yellow-light: #FFE14D;
+            --glovo-yellow-dark: #E5BC00;
+            --glovo-green: #00A082;
+            --glovo-green-light: #00C9A1;
+            --glovo-green-dark: #008A6E;
+
+            /* Text Colors */
+            --text-primary: #000000;
+            --text-secondary: #333333;
+            --text-muted: #666666;
+            --text-inverted: #FFFFFF;
+
+            /* Backgrounds */
+            --bg-primary: #FFD100;
+            --bg-card: #FFFFFF;
+            --bg-card-alt: #F5F5F5;
+            --bg-dark: #1a1a1a;
+
+            /* Semantic */
+            --danger: #E53935;
+            --danger-light: #FF5252;
+            --success: #00A082;
+
+            /* Shadows & Borders */
+            --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.12);
+            --shadow-elevated: 0 16px 48px rgba(0, 0, 0, 0.15);
+            --shadow-float: 0 24px 64px rgba(0, 0, 0, 0.18);
+            --border-radius-card: 24px;
+            --border-radius-pill: 100px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        /* Premium Scroll Progress Bar */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--glovo-green) 0%, var(--glovo-green-light) 50%, var(--glovo-yellow) 100%);
+            z-index: 1000;
+            transition: width 0.1s ease-out;
+            box-shadow: 0 0 20px rgba(0, 160, 130, 0.5);
+        }
+
+        /* Page Navigation Dots */
+        .page-nav {
+            position: fixed;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .page-nav-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .page-nav-dot::before {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .page-nav-dot:hover {
+            background: var(--glovo-green);
+            transform: scale(1.3);
+        }
+
+        .page-nav-dot.active {
+            background: var(--glovo-green);
+            transform: scale(1.2);
+            box-shadow: 0 0 20px rgba(0, 160, 130, 0.5);
+        }
+
+        .page-nav-dot.active::before {
+            border-color: rgba(0, 160, 130, 0.3);
+        }
+
+        .page-nav-dot .tooltip {
+            position: absolute;
+            right: 24px;
+            top: 50%;
+            transform: translateY(-50%) translateX(10px);
+            background: var(--bg-dark);
+            color: var(--text-inverted);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .page-nav-dot:hover .tooltip {
+            opacity: 1;
+            transform: translateY(-50%) translateX(0);
+        }
+
+        /* Animated Background - Vibrant Version */
+        .bg-animation {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .bg-gradient-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            will-change: transform;
+            transition: transform 0.3s ease-out;
+        }
+
+        .orb-1 {
+            width: 800px; height: 800px;
+            background: radial-gradient(circle, rgba(0, 160, 130, 0.35) 0%, rgba(0, 200, 160, 0.1) 50%, transparent 70%);
+            top: -300px; right: -200px;
+            animation: float1 20s ease-in-out infinite;
+        }
+
+        .orb-2 {
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.5) 0%, rgba(255, 225, 77, 0.2) 50%, transparent 70%);
+            bottom: -200px; left: -150px;
+            animation: float2 25s ease-in-out infinite;
+        }
+
+        .orb-3 {
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(0, 160, 130, 0.25) 0%, rgba(0, 200, 160, 0.05) 60%, transparent 70%);
+            top: 40%; left: 60%;
+            animation: float3 18s ease-in-out infinite;
+        }
+
+        .orb-4 {
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(255, 209, 0, 0.2) 0%, transparent 70%);
+            top: 60%; right: 10%;
+            animation: float1 22s ease-in-out infinite reverse;
+        }
+
+        /* Curved Path Element */
+        .curved-path {
+            position: fixed;
+            bottom: 0; left: 0;
+            width: 100%; height: 40%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .curved-path svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        @keyframes float1 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(-60px, 60px) scale(1.1); }
+            66% { transform: translate(40px, -40px) scale(0.95); }
+        }
+
+        @keyframes float2 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(50px, -50px) scale(1.05); }
+            66% { transform: translate(-40px, 30px) scale(0.98); }
+        }
+
+        @keyframes float3 {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.15); }
+        }
+
+        @media print {
+            body { background: white; }
+            .page { page-break-after: always; box-shadow: none !important; }
+            .page:last-child { page-break-after: avoid; }
+            .bg-animation, .back-link, .curved-path { display: none !important; }
+        }
+
+        /* Page Container - White Cards with Float Effect */
+        .page {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 60px;
+            background: var(--bg-card);
+            border-radius: var(--border-radius-card);
+            box-shadow: var(--shadow-float);
+            min-height: auto;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            transform: translateY(80px) scale(0.96);
+        }
+
+        .page.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .page:first-of-type {
+            margin-top: 100px;
+        }
+
+        .page:hover {
+            transform: translateY(-12px) scale(1.01);
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.22);
+        }
+
+        .page::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: var(--border-radius-card);
+            padding: 2px;
+            background: linear-gradient(135deg, transparent 0%, rgba(0, 160, 130, 0.1) 50%, transparent 100%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .page:hover::before {
+            opacity: 1;
+        }
+
+        /* Typography - Montserrat for Headings */
+        h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            color: var(--text-primary);
+            border-bottom: 4px solid var(--glovo-green);
+            display: inline-block;
+            position: relative;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--glovo-green), var(--glovo-yellow));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .page.visible h2::after {
+            transform: scaleX(1);
+        }
+
+        h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            margin-top: 2rem;
+            color: var(--text-primary);
+        }
+
+        h4 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--glovo-green);
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        strong { color: var(--text-primary); font-weight: 600; }
+
+        /* Header */
+        .audit-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid var(--bg-card-alt);
+            animation: fadeInDown 0.6s ease;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .audit-title { flex: 1; }
+
+        .title-with-logo {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .header-logo {
+            height: 48px;
+            width: auto;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+
+        .header-logo:hover {
+            transform: scale(1.05);
+        }
+
+        /* Logo Showcase - Page 5 */
+        .logo-showcase {
+            background: var(--bg-card-alt);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            box-shadow: var(--shadow-soft);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo-showcase::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--glovo-green), var(--glovo-yellow), var(--glovo-green));
+            background-size: 200% 100%;
+            animation: gradientFlow 3s ease-in-out infinite;
+        }
+
+        @keyframes gradientFlow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .logo-showcase:hover {
+            transform: translateY(-8px) scale(1.01);
+            box-shadow: 0 20px 50px rgba(0, 160, 130, 0.18);
+        }
+
+        .showcase-logo {
+            height: 64px;
+            width: auto;
+            flex-shrink: 0;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .logo-showcase:hover .showcase-logo {
+            transform: scale(1.08) rotate(-2deg);
+        }
+
+        .logo-showcase p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        .audit-title .brand-tag {
+            display: inline-block;
+            background: var(--glovo-yellow);
+            color: var(--text-primary);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 800;
+            padding: 8px 20px;
+            border-radius: var(--border-radius-pill);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            box-shadow: 0 4px 12px rgba(255, 209, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .audit-title .brand-tag::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+            animation: tagShimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes tagShimmer {
+            0% { left: -100%; }
+            50%, 100% { left: 100%; }
+        }
+
+        .audit-title .brand-tag:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(255, 209, 0, 0.5);
+        }
+
+        .audit-meta {
+            text-align: right;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        .audit-meta p { margin-bottom: 0.25rem; }
+
+        /* Thesis Box - Vibrant Style */
+        .thesis-box {
+            background: linear-gradient(135deg, var(--glovo-yellow) 0%, var(--glovo-yellow-light) 100%);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 20px;
+            position: relative;
+            box-shadow: 0 8px 24px rgba(255, 209, 0, 0.3);
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .thesis-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+            transition: all 0.6s ease;
+        }
+
+        .thesis-box:hover {
+            transform: scale(1.02);
+            box-shadow: 0 16px 40px rgba(255, 209, 0, 0.4);
+        }
+
+        .thesis-box:hover::before {
+            transform: scale(1.2);
+        }
+
+        .thesis-box p {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .thesis-box p:first-child {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 1.2rem;
+        }
+
+        /* Stats Grid - Floating Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card-alt);
+            border-radius: 16px;
+            padding: 1.5rem 1rem;
+            text-align: center;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-soft);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .stat-card:hover::before {
+            left: 100%;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-12px) scale(1.04);
+            box-shadow: 0 20px 50px rgba(0, 160, 130, 0.2);
+            background: var(--bg-card);
+        }
+
+        .stat-card .value {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--glovo-green);
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-card .label {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 500;
+        }
+
+        /* Finding Items */
+        .finding-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1.25rem;
+            margin-bottom: 0.75rem;
+            background: var(--bg-card-alt);
+            border-radius: 16px;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .finding-item::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: var(--glovo-green);
+            transform: scaleY(0);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-origin: bottom;
+        }
+
+        .finding-item:hover {
+            transform: translateX(12px);
+            box-shadow: 0 12px 40px rgba(0, 160, 130, 0.15);
+            background: var(--bg-card);
+        }
+
+        .finding-item:hover::after {
+            transform: scaleY(1);
+        }
+
+        .finding-num {
+            width: 32px; height: 32px;
+            background: linear-gradient(135deg, var(--glovo-green) 0%, var(--glovo-green-light) 100%);
+            color: var(--text-inverted);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 800;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(0, 160, 130, 0.3);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .finding-item:hover .finding-num {
+            transform: scale(1.15) rotate(5deg);
+            box-shadow: 0 8px 20px rgba(0, 160, 130, 0.4);
+        }
+
+        .finding-content h4 {
+            color: var(--text-primary);
+            text-transform: none;
+            letter-spacing: normal;
+            margin-bottom: 0.25rem;
+            font-size: 1rem;
+        }
+
+        .finding-content p { font-size: 0.85rem; margin: 0; }
+
+        /* Gap Section Cards */
+        .gap-section {
+            background: var(--bg-card-alt);
+            border-radius: 20px;
+            padding: 1.75rem;
+            margin-bottom: 1.25rem;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-soft);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gap-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--glovo-green), var(--glovo-yellow));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .gap-section:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .gap-section:hover::before {
+            transform: scaleX(1);
+        }
+
+        .gap-section h4 {
+            color: var(--text-primary);
+            text-transform: none;
+            letter-spacing: normal;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .gap-section .disconnect {
+            background: linear-gradient(135deg, rgba(229, 57, 53, 0.1) 0%, rgba(229, 57, 53, 0.05) 100%);
+            border-left: 4px solid var(--danger);
+            border-radius: 0 12px 12px 0;
+            padding: 1rem 1.25rem;
+            margin-top: 1rem;
+        }
+
+        .gap-section .disconnect p {
+            margin: 0;
+            color: var(--danger);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Quote Boxes */
+        .quote-box {
+            background: var(--bg-card);
+            border-left: 4px solid var(--glovo-green);
+            padding: 1.25rem 1.5rem;
+            margin: 1rem 0;
+            border-radius: 0 16px 16px 0;
+            box-shadow: var(--shadow-soft);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .quote-box::before {
+            content: '"';
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 4rem;
+            font-weight: 800;
+            color: var(--glovo-green);
+            opacity: 0.15;
+            line-height: 1;
+            transition: all 0.4s ease;
+        }
+
+        .quote-box:hover {
+            transform: translateX(12px) scale(1.01);
+            box-shadow: 0 16px 48px rgba(0, 160, 130, 0.18);
+        }
+
+        .quote-box:hover::before {
+            opacity: 0.25;
+            transform: scale(1.1);
+        }
+
+        .quote-box.negative { border-left-color: var(--danger); }
+        .quote-box.positive { border-left-color: var(--glovo-green); }
+
+        .quote-box p {
+            font-style: italic;
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .quote-box .source {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-style: normal;
+            font-weight: 500;
+        }
+
+        /* Rating Display - Bold Style */
+        .rating-display {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            background: linear-gradient(135deg, var(--danger) 0%, var(--danger-light) 100%);
+            border-radius: 20px;
+            padding: 2rem 2.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 12px 32px rgba(229, 57, 53, 0.3);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .rating-display::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+            animation: pulseGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .rating-display:hover {
+            transform: scale(1.02);
+            box-shadow: 0 20px 50px rgba(229, 57, 53, 0.4);
+        }
+
+        .rating-number {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 4.5rem;
+            font-weight: 800;
+            color: var(--text-inverted);
+            line-height: 1;
+            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .rating-details { color: var(--text-inverted); }
+        .rating-details h3 {
+            margin-bottom: 0.25rem;
+            margin-top: 0;
+            color: var(--text-inverted);
+        }
+        .rating-details p { margin: 0; font-size: 0.9rem; color: rgba(255,255,255,0.9); }
+        .rating-stars {
+            color: var(--glovo-yellow);
+            font-size: 1.75rem;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Pattern Grid */
+        .pattern-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .pattern-item {
+            background: var(--bg-card-alt);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-soft);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .pattern-item::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--glovo-green), var(--glovo-yellow));
+            border-radius: 3px;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .pattern-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 16px 45px rgba(0, 0, 0, 0.12);
+        }
+
+        .pattern-item:hover::after {
+            width: 60%;
+        }
+
+        .pattern-item h4 {
+            color: var(--glovo-green);
+            margin-bottom: 0.75rem;
+        }
+
+        .pattern-item h4.danger { color: var(--danger); }
+
+        /* Visual Grid */
+        .visual-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .visual-item {
+            background: var(--bg-card-alt);
+            border-radius: 20px;
+            padding: 1.75rem;
+            box-shadow: var(--shadow-soft);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .visual-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(0, 160, 130, 0.08) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .visual-item:hover {
+            transform: translateY(-10px) rotateX(2deg);
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .visual-item:hover::before {
+            opacity: 1;
+        }
+
+        .color-swatch {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .swatch {
+            width: 48px; height: 48px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .swatch:hover {
+            transform: scale(1.15) rotate(5deg);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Recommendations - Pill Button Style */
+        .recommendation {
+            background: var(--bg-card-alt);
+            border-radius: 20px;
+            padding: 1.75rem;
+            margin-bottom: 1.25rem;
+            position: relative;
+            padding-left: 5rem;
+            box-shadow: var(--shadow-soft);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+
+        .recommendation::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(0, 160, 130, 0.05) 0%, transparent 60%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .recommendation:hover {
+            transform: translateY(-10px) scale(1.01);
+            box-shadow: 0 28px 70px rgba(0, 160, 130, 0.2);
+        }
+
+        .recommendation:hover::before {
+            opacity: 1;
+        }
+
+        .recommendation .number {
+            position: absolute;
+            left: 1.5rem;
+            top: 1.75rem;
+            width: 44px; height: 44px;
+            background: linear-gradient(135deg, var(--glovo-green) 0%, var(--glovo-green-light) 100%);
+            color: var(--text-inverted);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 1.1rem;
+            box-shadow: 0 6px 16px rgba(0, 160, 130, 0.35);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .recommendation:hover .number {
+            transform: scale(1.1) rotate(-5deg);
+            box-shadow: 0 10px 25px rgba(0, 160, 130, 0.45);
+        }
+
+        .recommendation h4 {
+            color: var(--text-primary);
+            text-transform: none;
+            letter-spacing: normal;
+            font-size: 1.15rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .recommendation .actions {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            margin-top: 1rem;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .recommendation .actions span {
+            color: var(--glovo-green);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.05em;
+        }
+
+        .recommendation .actions ul {
+            margin: 0;
+            padding-left: 1.25rem;
+            list-style: disc;
+        }
+
+        .recommendation .actions li {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.35rem;
+            padding-left: 0;
+        }
+
+        .recommendation .actions li::marker {
+            color: var(--glovo-green);
+        }
+
+        .recommendation .actions li::before {
+            display: none;
+        }
+
+        /* Success Box */
+        .success-box {
+            background: linear-gradient(135deg, var(--glovo-green) 0%, var(--glovo-green-light) 100%);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            box-shadow: 0 8px 24px rgba(0, 160, 130, 0.3);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .success-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+            animation: successShimmer 4s ease-in-out infinite;
+        }
+
+        @keyframes successShimmer {
+            0% { left: -100%; }
+            50%, 100% { left: 150%; }
+        }
+
+        .success-box:hover {
+            transform: translateY(-6px) scale(1.01);
+            box-shadow: 0 16px 40px rgba(0, 160, 130, 0.4);
+        }
+
+        .success-box h4 {
+            color: var(--text-inverted);
+            margin-bottom: 0.75rem;
+        }
+
+        .success-box ul {
+            margin: 0;
+            padding-left: 1.25rem;
+            list-style: disc;
+        }
+
+        .success-box li {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 0.9rem;
+            padding-left: 0;
+        }
+
+        .success-box li::marker {
+            color: var(--glovo-yellow);
+        }
+
+        .success-box li::before {
+            display: none;
+        }
+
+        /* Footer */
+        .audit-footer {
+            margin-top: 2.5rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid var(--bg-card-alt);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .audit-footer p { font-size: 0.75rem; color: var(--text-muted); margin: 0; }
+
+        .page-number {
+            background: var(--glovo-green);
+            color: var(--text-inverted);
+            padding: 8px 16px;
+            border-radius: var(--border-radius-pill);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(0, 160, 130, 0.3);
+        }
+
+        /* Default List Styles */
+        ul { list-style: none; padding-left: 0; }
+
+        ul li {
+            position: relative;
+            padding-left: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        ul li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--glovo-green);
+            font-weight: 700;
+        }
+
+        /* Back Button - Pill Style */
+        .back-link {
+            position: fixed;
+            top: 24px; left: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 12px 20px;
+            background: var(--bg-card);
+            border-radius: var(--border-radius-pill);
+            box-shadow: var(--shadow-elevated);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 100;
+            overflow: hidden;
+        }
+
+        .back-link::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--glovo-green);
+            transform: translateX(-100%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: -1;
+        }
+
+        .back-link:hover {
+            color: var(--text-inverted);
+            transform: translateX(-4px);
+            box-shadow: 0 12px 32px rgba(0, 160, 130, 0.4);
+        }
+
+        .back-link:hover::before {
+            transform: translateX(0);
+        }
+
+        /* Premium Reveal Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal.from-left {
+            transform: translateX(-60px);
+        }
+
+        .reveal.from-right {
+            transform: translateX(60px);
+        }
+
+        .reveal.from-scale {
+            transform: scale(0.9);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0) translateX(0) scale(1);
+        }
+
+        /* Stagger Animation Classes */
+        .stagger-1 { transition-delay: 0.1s; }
+        .stagger-2 { transition-delay: 0.2s; }
+        .stagger-3 { transition-delay: 0.3s; }
+        .stagger-4 { transition-delay: 0.4s; }
+        .stagger-5 { transition-delay: 0.5s; }
+        .stagger-6 { transition-delay: 0.6s; }
+
+        /* Premium Glow Effect on Interactive Elements */
+        .glow-hover {
+            position: relative;
+        }
+
+        .glow-hover::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: inherit;
+            background: linear-gradient(135deg, var(--glovo-green), var(--glovo-yellow));
+            opacity: 0;
+            z-index: -1;
+            filter: blur(15px);
+            transition: opacity 0.4s ease;
+        }
+
+        .glow-hover:hover::after {
+            opacity: 0.4;
+        }
+
+        /* Smooth Text Reveal */
+        .text-reveal {
+            overflow: hidden;
+        }
+
+        .text-reveal span {
+            display: inline-block;
+            transform: translateY(100%);
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .text-reveal.visible span {
+            transform: translateY(0);
+        }
+
+        /* Counter Animation */
+        .counter-animate {
+            display: inline-block;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Floating Animation for Cards */
+        @keyframes subtleFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
+        .float-subtle {
+            animation: subtleFloat 6s ease-in-out infinite;
+        }
+
+        /* Shimmer Effect */
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .shimmer {
+            background: linear-gradient(
+                90deg,
+                transparent 0%,
+                rgba(255, 255, 255, 0.4) 50%,
+                transparent 100%
+            );
+            background-size: 200% 100%;
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        /* Magnetic Button Effect Container */
+        .magnetic {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page {
+                padding: 30px;
+                margin: 20px;
+                border-radius: 20px;
+            }
+            h1 { font-size: 2.25rem; }
+            h2 { font-size: 1.5rem; }
+            .stats-grid, .pattern-grid, .visual-grid { grid-template-columns: 1fr; }
+            .rating-display { flex-direction: column; text-align: center; }
+            .recommendation { padding-left: 1.5rem; padding-top: 4rem; }
+            .recommendation .number { top: 1.25rem; left: 1.25rem; }
+            .page-nav { display: none; }
+            .title-with-logo { flex-direction: column; align-items: flex-start; gap: 1rem; }
+            .header-logo { height: 36px; }
+            .logo-showcase { flex-direction: column; text-align: center; }
+        }
+
+        @media (max-width: 480px) {
+            .page { padding: 24px; margin: 15px; }
+            h1 { font-size: 1.85rem; }
+            .audit-header { flex-direction: column; gap: 1.5rem; }
+            .audit-meta { text-align: left; }
+            .back-link { padding: 10px 16px; font-size: 0.75rem; }
+        }
+
+        /* Print Optimizations */
+        @media print {
+            .scroll-progress, .page-nav { display: none !important; }
+            .page {
+                opacity: 1 !important;
+                transform: none !important;
+                box-shadow: none !important;
+                page-break-inside: avoid;
+            }
+            .stat-card, .gap-section, .pattern-item, .recommendation,
+            .visual-item, .finding-item, .quote-box, .logo-showcase,
+            .thesis-box, .rating-display, .success-box {
+                opacity: 1 !important;
+                transform: none !important;
+            }
+        }
+
+        /* High Performance Mode - reduce animations on scroll */
+        .reduce-motion * {
+            animation-duration: 0.01ms !important;
+            transition-duration: 0.01ms !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Scroll Progress Bar -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <!-- Page Navigation Dots -->
+    <nav class="page-nav" id="pageNav">
+        <div class="page-nav-dot" data-page="1">
+            <span class="tooltip">Executive Summary</span>
+        </div>
+        <div class="page-nav-dot" data-page="2">
+            <span class="tooltip">Strategic Gap Analysis</span>
+        </div>
+        <div class="page-nav-dot" data-page="3">
+            <span class="tooltip">Social Media Audit</span>
+        </div>
+        <div class="page-nav-dot" data-page="4">
+            <span class="tooltip">Customer Experience</span>
+        </div>
+        <div class="page-nav-dot" data-page="5">
+            <span class="tooltip">Visual Identity</span>
+        </div>
+        <div class="page-nav-dot" data-page="6">
+            <span class="tooltip">Recommendations</span>
+        </div>
+    </nav>
+
+    <!-- Animated Background -->
+    <div class="bg-animation">
+        <div class="bg-gradient-orb orb-1"></div>
+        <div class="bg-gradient-orb orb-2"></div>
+        <div class="bg-gradient-orb orb-3"></div>
+        <div class="bg-gradient-orb orb-4"></div>
+    </div>
+
+    <!-- Curved Path SVG -->
+    <div class="curved-path">
+        <svg viewBox="0 0 1440 400" preserveAspectRatio="none">
+            <path d="M0,400 C360,300 720,350 1080,280 C1260,240 1380,200 1440,180 L1440,400 Z" fill="rgba(0, 160, 130, 0.08)"/>
+            <path d="M0,400 C480,320 960,380 1440,300 L1440,400 Z" fill="rgba(0, 160, 130, 0.05)"/>
+        </svg>
+    </div>
+
+    <a href="../index.html" class="back-link magnetic">
+        <span>←</span> Back to Portfolio
+    </a>
+
+    <!-- PAGE 1: EXECUTIVE SUMMARY -->
+    <div class="page" id="page-1">
+        <header class="audit-header">
+            <div class="audit-title">
+                <span class="brand-tag">Brand Audit</span>
+                <div class="title-with-logo">
+                    <h1>Glovo</h1>
+                    <img src="glovo-logo.png" alt="Glovo Logo" class="header-logo">
+                </div>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Strategic Gap Analysis</p>
+            </div>
+            <div class="audit-meta">
+                <p><strong>Prepared by:</strong> Paolo Giannitti</p>
+                <p><strong>Date:</strong> February 2026</p>
+                <p><strong>Scope:</strong> Digital Brand Execution</p>
+            </div>
+        </header>
+
+        <div class="thesis-box">
+            <p><strong>Glovo is trying to build a community on top of a service customers don't trust.</strong></p>
+            <p style="margin-top: 0.75rem; font-size: 0.95rem; font-weight: 400;">Their 2024-2025 redesign added social features—friend connections, video discovery, curated restaurant lists—but their Trustpilot rating is 2.2 stars. 56% of reviewers say they won't use Glovo again. That's not a foundation for community. That's a fundamental problem.</p>
+        </div>
+
+        <h2>Company Snapshot</h2>
+        <p><strong>What Glovo Is:</strong> Spanish delivery platform operating in 23 countries across Europe, Western Asia, and Africa. Founded 2014 in Barcelona. Now owned by Germany's Delivery Hero.</p>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <span class="value">4.3M</span>
+                <span class="label">Active Customers</span>
+            </div>
+            <div class="stat-card">
+                <span class="value">120K</span>
+                <span class="label">Monthly Couriers</span>
+            </div>
+            <div class="stat-card">
+                <span class="value">150K</span>
+                <span class="label">Local Stores</span>
+            </div>
+            <div class="stat-card">
+                <span class="value">80M+</span>
+                <span class="label">Total Downloads</span>
+            </div>
+        </div>
+
+        <p><strong>The Strategic Shift:</strong> October 2024: Launched "Glovo Next" redesign with social features (connect with friends, share restaurant picks, vertical video feed). June 2025: Added AI gifting assistant, personalized homepage, flash deals.</p>
+        <p>They're trying to evolve from logistics tool to social commerce platform. From "I need food" to "I want to see what my community is eating."</p>
+
+        <h3>Key Findings</h3>
+        <div class="finding-item">
+            <span class="finding-num">1</span>
+            <div class="finding-content">
+                <h4>They operate on two incompatible tracks</h4>
+                <p>Marketing talks about community, care, sustainability. Product optimizes for speed, convenience, transaction volume. Result: Brand feels incoherent.</p>
+            </div>
+        </div>
+        <div class="finding-item">
+            <span class="finding-num">2</span>
+            <div class="finding-content">
+                <h4>Social features exist but don't create community</h4>
+                <p>Friend connections, shared picks, video discovery—all launched. But if customers fundamentally distrust your service, they won't build social graphs in your app.</p>
+            </div>
+        </div>
+        <div class="finding-item">
+            <span class="finding-num">3</span>
+            <div class="finding-content">
+                <h4>Courier experience undermines the narrative</h4>
+                <p>Corporate site: "Let's do it together," partnership language. Rider app reality: Algorithmic control, no delivery choice. Your physical brand ambassadors feel like cogs in a machine.</p>
+            </div>
+        </div>
+        <div class="finding-item">
+            <span class="finding-num">4</span>
+            <div class="finding-content">
+                <h4>Visual identity is strong but messaging is confused</h4>
+                <p>Helio design system: Professional, consistent, distinctive yellow. But what are they? Fast delivery tool? Social discovery platform? Everything app? Answer changes depending on which page you're on.</p>
+            </div>
+        </div>
+
+        <div class="audit-footer">
+            <p>Glovo Brand Audit | Paolo Giannitti</p>
+            <span class="page-number">Page 1 of 6</span>
+        </div>
+    </div>
+
+    <!-- PAGE 2: STRATEGIC GAP ANALYSIS -->
+    <div class="page" id="page-2">
+        <h2>Strategic Gap Analysis</h2>
+        <p>Glovo positions itself as community-focused, sustainable, and caring. Their actual product experience is high-speed logistics with customer service problems.</p>
+
+        <div class="gap-section">
+            <h4>Gap 1: "Community" Language, Transactional Experience</h4>
+            <div class="quote-box positive">
+                <p>"Glovo is the first in the industry to combine social media elements within our platform... a new and interactive way for users to discover, share, and engage."</p>
+                <span class="source">— Chief Product Officer, October 2024</span>
+            </div>
+            <p><strong>What Users Get:</strong> An app optimized for fastest possible checkout. Real-time tracking focused on delivery ETA, not on the human bringing your food. Interface designed to ignore the courier and restaurant owner—just watch the timer.</p>
+            <div class="disconnect">
+                <p>You can add all the social features you want. If the core experience treats delivery as pure logistics, you're not building community. You're adding noise.</p>
+            </div>
+        </div>
+
+        <div class="gap-section">
+            <h4>Gap 2: Partner Language vs. Algorithmic Control</h4>
+            <p><strong>What They Say:</strong> Recruitment pages use "Let's do it together." They frame the courier relationship as a "journey to grow and digitise your business." Corporate site promises "fair standards, upskilling, social rights."</p>
+            <p><strong>What Couriers Experience:</strong> "If a rider has two orders picked up you can not choose what to deliver first." The algorithm decides. You're the execution layer.</p>
+            <div class="disconnect">
+                <p>You can't claim partnership while removing agency. If couriers feel like algorithmic tools, the "community partner" story falls apart.</p>
+            </div>
+        </div>
+
+        <div class="gap-section">
+            <h4>Gap 3: Sustainability Claims vs. Consumption Mechanics</h4>
+            <p><strong>What They Say:</strong> 8,854 tons CO2 reduced. 1,124 tons food waste avoided. 6M sustainable packaging units. Sustainability "in our DNA."</p>
+            <p><strong>What The Product Does:</strong> Optimizes for high-frequency ordering. Primary messaging: "Order anything you want," "delivery in minutes." Every design choice encourages more transactions.</p>
+            <div class="disconnect">
+                <p>You can't build an app that makes overconsumption frictionless, then claim sustainability is in your DNA. That's not a growth model, it's greenwashing.</p>
+            </div>
+        </div>
+
+        <div class="gap-section">
+            <h4>Gap 4: Innovation Theater vs. Operational Reality</h4>
+            <p><strong>What They Launch:</strong> Social features, AI gifting, flash deals, personalized profiles.</p>
+            <p><strong>What Customers Report:</strong> 2.2 stars. "Customer service unpleasant." "Order never arrived, no refund." "They closed my case 3 times." 56% won't use again.</p>
+            <div class="disconnect">
+                <p>Product team ships features. Operations team can't deliver basics. You can't build loyalty on a broken service by adding a video feed.</p>
+            </div>
+        </div>
+
+        <div class="audit-footer">
+            <p>Glovo Brand Audit | Paolo Giannitti</p>
+            <span class="page-number">Page 2 of 6</span>
+        </div>
+    </div>
+
+    <!-- PAGE 3: SOCIAL MEDIA AUDIT -->
+    <div class="page" id="page-3">
+        <h2>Social Media Audit</h2>
+
+        <h3 style="margin-top: 0;">The Social Features: What They Built</h3>
+        <p><strong>October 2024 Launch ("Glovo Next"):</strong> Friend connections within app, "Picks" (curated restaurant/dish lists), Video Discovery Wall (vertical videos of menu items), User profiles (name, photo, favorites).</p>
+        <p><strong>Strategic Intent:</strong> Move from "users open app when hungry" to "users browse app for social discovery." Increase time-in-app. Reduce customer acquisition cost. Build psychological lock-in.</p>
+
+        <h3>The Question: Does Anyone Use This?</h3>
+        <p>I can't access internal usage data. But I can look at what Glovo's doing on actual social media platforms.</p>
+
+        <div class="pattern-grid">
+            <div class="pattern-item">
+                <h4>Instagram/Facebook</h4>
+                <p>Standard brand account. Product shots, promos, campaign announcements. Nothing wrong with it. Nothing special either. Comments are mostly logistics questions ("Why isn't my order here?") not engagement.</p>
+            </div>
+            <div class="pattern-item">
+                <h4>What's Missing</h4>
+                <p>No evidence of community. The social features launched October 2024 don't seem to have created visible conversation outside the app.</p>
+            </div>
+        </div>
+
+        <h3>The Social Features vs. Social Media Reality</h3>
+        <p>Glovo's betting I'll: (1) Connect my friends inside the Glovo app (2) Curate and share restaurant lists within Glovo (3) Browse a Glovo-specific video feed instead of TikTok (4) Treat delivery logistics as a social activity.</p>
+        <p><strong>That's a big ask. Especially when your core service has a 2.2-star rating.</strong></p>
+
+        <h3>Video Discovery Wall: The Real Bet</h3>
+        <p>The vertical video feed is Glovo's attempt to solve the "Utility Trap"—users only opening the app when they need something.</p>
+        <p><strong>The Reality Check:</strong> I can already watch food videos on TikTok and Instagram. Those platforms have better recommendation algorithms, actual communities, creators I already follow, entertainment value beyond "here's what you can order."</p>
+
+        <h3>The Missing Piece: Courier Content</h3>
+        <p>If Glovo wants to be a community platform, the couriers should be the stars. 120,000 monthly couriers. Each one navigating cities, interacting with restaurants, experiencing local culture. That's content gold.</p>
+        <p>But Glovo doesn't spotlight couriers as creators. They're logistics nodes. <strong>That's the missed opportunity.</strong> You have 120K people on the ground. If you treated them as community members instead of delivery mechanisms, you'd have authentic content.</p>
+
+        <h3>Verdict</h3>
+        <p>The social features exist. They're well-designed. But existence isn't adoption. I don't see evidence that Glovo's social features created a community. I see a delivery app that added social mechanics to increase engagement metrics. <strong>There's a difference.</strong></p>
+
+        <div class="audit-footer">
+            <p>Glovo Brand Audit | Paolo Giannitti</p>
+            <span class="page-number">Page 3 of 6</span>
+        </div>
+    </div>
+
+    <!-- PAGE 4: CUSTOMER EXPERIENCE -->
+    <div class="page" id="page-4">
+        <h2>Customer Experience Breakdown</h2>
+
+        <div class="rating-display">
+            <span class="rating-number">2.2</span>
+            <div class="rating-details">
+                <div class="rating-stars">★★☆☆☆</div>
+                <h3>Trustpilot Rating</h3>
+                <p>1,278+ reviews | 27% would recommend</p>
+                <p style="color: var(--glovo-yellow); font-weight: 600; margin-top: 0.5rem;">56% say they won't use Glovo again</p>
+            </div>
+        </div>
+
+        <p><strong>For context:</strong> Industry average for delivery apps is 3.5-4.0 stars. Glovo is a full star to two stars below baseline.</p>
+
+        <h3>What Customers Actually Say</h3>
+
+        <div class="pattern-grid">
+            <div class="pattern-item">
+                <h4 class="danger">Pattern 1: Undelivered Orders, No Refunds</h4>
+                <div class="quote-box negative" style="margin-top: 0.5rem;">
+                    <p>"The delivery person never showed up. Glovo said I was not at home. That was not true... After a month now I received no refund."</p>
+                    <span class="source">— Verified reviewer, Oct 2025</span>
+                </div>
+            </div>
+            <div class="pattern-item">
+                <h4 class="danger">Pattern 2: Customer Service That Doesn't Serve</h4>
+                <div class="quote-box negative" style="margin-top: 0.5rem;">
+                    <p>"1 in 4 orders are not delivered. Customer service is each time more unpleasant, they only attend after more than one hour delay."</p>
+                    <span class="source">— Verified reviewer, 2025</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="quote-box negative">
+            <p>"Several items were missing from 2 orders... I contacted Glovo help and they closed the case 3 times! without refunding."</p>
+            <span class="source">— Verified reviewer, December 2025</span>
+        </div>
+
+        <h3>Brand Promise Violations</h3>
+        <ul>
+            <li><strong>Promise:</strong> "We save you time, when you don't have it." <strong>Reality:</strong> Customers spend an hour+ waiting for support responses.</li>
+            <li><strong>Promise:</strong> "With Glovo, you have the city in the palm of your hands." <strong>Reality:</strong> An app that sometimes delivers and sometimes doesn't, with no clear recourse.</li>
+            <li><strong>Promise:</strong> "Glovo is the number one app!" <strong>Reality:</strong> You can order. Whether you get it is another question.</li>
+        </ul>
+
+        <h3>Why This Matters for the Brand</h3>
+        <p><strong>You can't build "community" on a foundation of broken promises.</strong></p>
+        <p>Social features are supposed to create lock-in. The theory: Users might switch apps for a discount (utility decision), but won't leave if their friend network lives in your app (community lock-in).</p>
+        <p>But if 56% of users say they won't come back, you don't have a retention problem you can solve with features. You have a service problem you're avoiding.</p>
+
+        <p style="margin-top: 1.5rem; font-weight: 600; color: var(--text-primary);">2.2 stars isn't an outlier or bad luck. It's a pattern. The service doesn't match the promise. And you can't fix that with social features.</p>
+
+        <div class="audit-footer">
+            <p>Glovo Brand Audit | Paolo Giannitti</p>
+            <span class="page-number">Page 4 of 6</span>
+        </div>
+    </div>
+
+    <!-- PAGE 5: VISUAL IDENTITY -->
+    <div class="page" id="page-5">
+        <h2>Visual Identity & Messaging Consistency</h2>
+
+        <h3 style="margin-top: 0;">What Glovo Gets Right: The Helio Design System</h3>
+        <p>Glovo's visual identity is actually good. Professional, distinctive, consistent.</p>
+
+        <div class="logo-showcase">
+            <img src="glovo-logo.png" alt="Glovo Logo" class="showcase-logo">
+            <p>The logo evolved from "Globo" (balloon) to this minimalist wordmark. Clean, recognizable, with the distinctive yellow pin marker.</p>
+        </div>
+
+        <div class="visual-grid">
+            <div class="visual-item">
+                <h4>Color Palette</h4>
+                <div class="color-swatch">
+                    <div class="swatch" style="background: #FFD100;"></div>
+                    <div class="swatch" style="background: #00A082;"></div>
+                    <div class="swatch" style="background: #000000;"></div>
+                    <div class="swatch" style="background: #FF4A4A;"></div>
+                </div>
+                <p style="font-size: 0.85rem;">Yellow + green combination is unique in delivery space. Not brutalist tech, not soft lifestyle. "Vibrant functional."</p>
+            </div>
+            <div class="visual-item">
+                <h4>Technical Infrastructure</h4>
+                <p style="font-size: 0.85rem;">Design system built on YAML files storing primitive colors and spacing. Shared component library. This allows consistency across thousands of screens in 23 countries.</p>
+                <p style="font-size: 0.85rem; color: var(--glovo-green);"><strong>This is professional work. The visual identity isn't the problem.</strong></p>
+            </div>
+        </div>
+
+        <h3>What Glovo Gets Wrong: Messaging Coherence</h3>
+        <p>The design system is consistent. The message is not.</p>
+
+        <div class="pattern-grid">
+            <div class="pattern-item">
+                <h4>On Homepage</h4>
+                <p>"Glovo is the number one app for ordering anything you want!"</p>
+                <p style="font-size: 0.75rem; color: var(--text-muted);">Direct, utility-focused. Market dominance claim.</p>
+            </div>
+            <div class="pattern-item">
+                <h4>On About Page</h4>
+                <p>"Enhancing the lives of people in their cities."</p>
+                <p style="font-size: 0.75rem; color: var(--text-muted);">Softer, community-focused. Purpose-driven.</p>
+            </div>
+            <div class="pattern-item">
+                <h4>On Sustainability Page</h4>
+                <p>"Social Impact," "eco-friendly growth model," "in our DNA."</p>
+                <p style="font-size: 0.75rem; color: var(--text-muted);">Impact narrative. Environmental credentials.</p>
+            </div>
+            <div class="pattern-item">
+                <h4>On Careers Page</h4>
+                <p>"Gas" (speed), "Good Vibes" (trust), "Stay Humble."</p>
+                <p style="font-size: 0.75rem; color: var(--text-muted);">Internal culture that never reaches customers.</p>
+            </div>
+        </div>
+
+        <p><strong>These aren't variations of the same voice. They're three different brands sharing a visual system.</strong></p>
+
+        <h3>The "Community" Language Audit</h3>
+        <p>"Community of foodies" (Glovo Next), "Local community" (Sustainability), "Our community" (Careers). None of these are actual communities. They're stakeholder categories.</p>
+        <p>A community has: shared identity beyond the transaction, member-to-member interaction, cultural norms and inside knowledge, reasons to exist beyond the product. <strong>Glovo's "community" is marketing language, not sociology.</strong></p>
+
+        <h3>The Fix</h3>
+        <p>Glovo needs a messaging system as rigorous as Helio. Define: Core brand voice, Primary message, Supporting messages, Off-brand examples. Then enforce it the way Helio enforces color codes.</p>
+        <p><strong>Until then, you have a great-looking brand saying twelve different things.</strong></p>
+
+        <div class="audit-footer">
+            <p>Glovo Brand Audit | Paolo Giannitti</p>
+            <span class="page-number">Page 5 of 6</span>
+        </div>
+    </div>
+
+    <!-- PAGE 6: RECOMMENDATIONS -->
+    <div class="page" id="page-6">
+        <h2>Recommendations</h2>
+
+        <p style="font-size: 1rem; color: var(--text-primary); margin-bottom: 1.5rem;"><strong>The Core Problem:</strong> Glovo is building features to solve problems they refuse to acknowledge. Poor customer service? Add social features. Low trust? Add video discovery. None of this works. You can't feature your way out of operational failure.</p>
+
+        <div class="recommendation">
+            <span class="number">1</span>
+            <h4>Fix Service Quality Before Adding Features</h4>
+            <p>Pause new feature development. Redirect resources to operations.</p>
+            <div class="actions">
+                <span>Specific Actions</span>
+                <ul>
+                    <li>Hire 2x customer service capacity to cut response time from 60+ minutes to under 15</li>
+                    <li>Automate refund processing (shouldn't take a month)</li>
+                    <li>Improve driver communication tools</li>
+                    <li>Create "service quality score" visible to customers</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="recommendation">
+            <span class="number">2</span>
+            <h4>Pick a Lane—Utility or Community</h4>
+            <p>Stop trying to be both a logistics tool and a social platform. Choose one, commit to it, align everything to support it.</p>
+            <div class="actions">
+                <span>Options</span>
+                <ul>
+                    <li><strong>Option A:</strong> Double down on Utility—"Fastest, most reliable delivery"</li>
+                    <li><strong>Option B:</strong> Commit to Community—"Your city's food community" (requires fixing service first)</li>
+                    <li><strong>Option C:</strong> Everything App (current)—Confused messaging, feature bloat. This doesn't work.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="recommendation">
+            <span class="number">3</span>
+            <h4>Make Impact Metrics Visible in the Product</h4>
+            <p>If sustainability is a real value, show it where customers actually are: in the transaction flow.</p>
+            <div class="actions">
+                <span>Implementation</span>
+                <ul>
+                    <li>Real-time tracking: Show "CO2 saved by choosing bike delivery"</li>
+                    <li>Checkout: Display "food waste prevented" as cumulative stat</li>
+                    <li>Profile: Personal impact dashboard</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="recommendation">
+            <span class="number">4</span>
+            <h4>Create a Messaging System as Rigorous as Helio</h4>
+            <p>Build a brand voice framework with the same discipline as your design system.</p>
+            <div class="actions">
+                <span>Define</span>
+                <ul>
+                    <li>Primary brand voice (pick one—not all four)</li>
+                    <li>Message hierarchy (core claim, supporting messages)</li>
+                    <li>Off-brand examples ("never say this")</li>
+                    <li>Copy approval process like design QA</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="success-box">
+            <h4>What Success Looks Like (12 Months)</h4>
+            <ul>
+                <li>Trustpilot: 3.5+ stars (from 2.2)</li>
+                <li>Retention: 70%+ would use again (from 44%)</li>
+                <li>Support response: Under 15 minutes (from 60+)</li>
+                <li>Brand perception: Clear answer to "What is Glovo for?"</li>
+            </ul>
+        </div>
+
+        <p style="margin-top: 1.5rem; font-size: 0.9rem; color: var(--text-muted);">This audit isn't about tearing down Glovo. It's about seeing what others miss. Most people look at social features and think "innovation." I see a company avoiding its operational problems. The gap between what a brand says and what it does—that's where the story is. <strong style="color: var(--text-primary);">And for Glovo, that gap is wide.</strong></p>
+
+        <div class="audit-footer">
+            <p>Glovo Brand Audit | Paolo Giannitti | February 2026</p>
+            <span class="page-number">Page 6 of 6</span>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // PREMIUM SCROLL & ANIMATION SYSTEM
+        // ==========================================
+
+        // Scroll Progress Bar
+        const scrollProgress = document.getElementById('scrollProgress');
+        const updateScrollProgress = () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = (scrollTop / docHeight) * 100;
+            scrollProgress.style.width = `${progress}%`;
+        };
+
+        // Page Navigation Dots
+        const pages = document.querySelectorAll('.page');
+        const navDots = document.querySelectorAll('.page-nav-dot');
+
+        const updateActiveNav = () => {
+            const scrollPos = window.scrollY + window.innerHeight / 3;
+
+            pages.forEach((page, index) => {
+                const pageTop = page.offsetTop;
+                const pageBottom = pageTop + page.offsetHeight;
+
+                if (scrollPos >= pageTop && scrollPos < pageBottom) {
+                    navDots.forEach(dot => dot.classList.remove('active'));
+                    navDots[index]?.classList.add('active');
+                }
+            });
+        };
+
+        // Click to navigate
+        navDots.forEach(dot => {
+            dot.addEventListener('click', () => {
+                const pageNum = dot.dataset.page;
+                const targetPage = document.getElementById(`page-${pageNum}`);
+                if (targetPage) {
+                    targetPage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Page Reveal Observer
+        const pageObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    // Trigger child animations after page reveals
+                    setTimeout(() => {
+                        revealChildElements(entry.target);
+                    }, 200);
+                }
+            });
+        }, { threshold: 0.15, rootMargin: '0px 0px -100px 0px' });
+
+        pages.forEach(page => pageObserver.observe(page));
+
+        // Child Elements Reveal with Stagger
+        const revealChildElements = (parent) => {
+            const elements = parent.querySelectorAll('.stat-card, .gap-section, .pattern-item, .recommendation, .visual-item, .finding-item, .quote-box, .logo-showcase, .thesis-box, .rating-display, .success-box');
+
+            elements.forEach((el, index) => {
+                setTimeout(() => {
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0) translateX(0) scale(1)';
+                }, index * 80);
+            });
+        };
+
+        // Initialize elements for animation
+        document.querySelectorAll('.stat-card, .gap-section, .pattern-item, .recommendation, .visual-item, .finding-item, .quote-box, .logo-showcase, .thesis-box, .rating-display, .success-box').forEach((el) => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.7s cubic-bezier(0.4, 0, 0.2, 1)';
+        });
+
+        // Premium Parallax on Mouse Move
+        let mouseX = 0, mouseY = 0;
+        let currentX = 0, currentY = 0;
+        const ease = 0.08;
+
+        const orbs = document.querySelectorAll('.bg-gradient-orb');
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+            mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+        });
+
+        const animateOrbs = () => {
+            currentX += (mouseX - currentX) * ease;
+            currentY += (mouseY - currentY) * ease;
+
+            orbs.forEach((orb, index) => {
+                const depth = (index + 1) * 25;
+                const rotateX = currentY * 5;
+                const rotateY = currentX * 5;
+                orb.style.transform = `translate(${currentX * depth}px, ${currentY * depth}px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            });
+
+            requestAnimationFrame(animateOrbs);
+        };
+        animateOrbs();
+
+        // Magnetic Effect for Buttons
+        document.querySelectorAll('.magnetic').forEach(el => {
+            el.addEventListener('mousemove', (e) => {
+                const rect = el.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                el.style.transform = `translate(${x * 0.15}px, ${y * 0.15}px)`;
+            });
+
+            el.addEventListener('mouseleave', () => {
+                el.style.transform = 'translate(0, 0)';
+            });
+        });
+
+        // Smooth Scroll Listener
+        let ticking = false;
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    updateScrollProgress();
+                    updateActiveNav();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        });
+
+        // Number Counter Animation
+        const animateValue = (element, start, end, duration) => {
+            const startTime = performance.now();
+            const update = (currentTime) => {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const easeProgress = 1 - Math.pow(1 - progress, 4);
+                const current = start + (end - start) * easeProgress;
+
+                if (element.dataset.suffix) {
+                    element.textContent = Math.floor(current) + element.dataset.suffix;
+                } else {
+                    element.textContent = current.toFixed(1);
+                }
+
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                }
+            };
+            requestAnimationFrame(update);
+        };
+
+        // Observe stat cards for counter animation
+        const counterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !entry.target.dataset.animated) {
+                    entry.target.dataset.animated = 'true';
+                    const valueEl = entry.target.querySelector('.value');
+                    if (valueEl) {
+                        const text = valueEl.textContent;
+                        const number = parseFloat(text.replace(/[^0-9.]/g, ''));
+                        const suffix = text.replace(/[0-9.]/g, '');
+                        valueEl.dataset.suffix = suffix;
+                        animateValue(valueEl, 0, number, 1500);
+                    }
+                }
+            });
+        }, { threshold: 0.5 });
+
+        document.querySelectorAll('.stat-card').forEach(card => {
+            counterObserver.observe(card);
+        });
+
+        // Initialize
+        updateScrollProgress();
+        updateActiveNav();
+
+        // Reveal first page on load with delay
+        setTimeout(() => {
+            const firstPage = document.getElementById('page-1');
+            if (firstPage) {
+                firstPage.classList.add('visible');
+                setTimeout(() => revealChildElements(firstPage), 300);
+            }
+        }, 100);
+
+        // Handle reduced motion preference
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            document.querySelectorAll('.page, .stat-card, .gap-section, .pattern-item, .recommendation, .visual-item, .finding-item, .quote-box').forEach(el => {
+                el.style.opacity = '1';
+                el.style.transform = 'none';
+                el.style.transition = 'none';
+            });
+        }
+    </script>
+</body>
+</html>

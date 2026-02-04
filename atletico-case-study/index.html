@@ -1,0 +1,1842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The 350-Day Problem | Atlético Madrid Fan Engagement Strategy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Modern Retro Sports Grid Palette */
+            --navy: #00205B;
+            --red: #C8102E;
+            --white: #FFFFFF;
+            --black-matte: #1A1A1A;
+            --yellow: #FFD700;
+            --bg: #F1F1F1;
+            --bg-darker: #E5E5E5;
+            --grid-line: rgba(0, 0, 0, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 16px;
+        }
+
+        body {
+            font-family: 'Space Mono', monospace;
+            background: var(--bg);
+            color: var(--black-matte);
+            line-height: 1.5;
+        }
+
+        /* Paper Grain Texture - Background Only */
+        .bg-noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.35;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+        }
+
+        /* Grid Overlay - Background Only */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            background-image:
+                linear-gradient(var(--grid-line) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+            background-size: calc(100% / 3) calc(100% / 3);
+        }
+
+        /* Dynamic Background Orbs */
+        .bg-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            pointer-events: none;
+            z-index: 0;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .bg-orb-1 {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(200, 16, 46, 0.15) 0%, transparent 70%);
+            top: -10%;
+            left: -5%;
+            animation-duration: 25s;
+        }
+
+        .bg-orb-2 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(0, 32, 91, 0.12) 0%, transparent 70%);
+            top: 50%;
+            right: -10%;
+            animation-delay: -5s;
+            animation-duration: 30s;
+        }
+
+        .bg-orb-3 {
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.1) 0%, transparent 70%);
+            bottom: -5%;
+            left: 40%;
+            animation-delay: -10s;
+            animation-duration: 22s;
+        }
+
+        .bg-orb-4 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(200, 16, 46, 0.1) 0%, transparent 70%);
+            top: 30%;
+            left: 20%;
+            animation-delay: -15s;
+            animation-duration: 28s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(40px, -25px) scale(1.05); }
+            50% { transform: translate(-15px, 35px) scale(0.95); }
+            75% { transform: translate(-35px, -15px) scale(1.02); }
+        }
+
+        /* Particle Canvas */
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .page {
+            width: 100vw;
+            height: 100vh;
+            min-height: 720px;
+            padding: 3rem 4rem;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            background: transparent;
+            z-index: 2;
+        }
+
+        /* Diagonal Arc Accents */
+        .page::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 80%;
+            height: 200%;
+            border: 3px solid var(--red);
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0.15;
+            z-index: -1;
+        }
+
+        .page-number {
+            position: absolute;
+            bottom: 2rem;
+            right: 3rem;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 4rem;
+            color: var(--navy);
+            opacity: 0.1;
+            line-height: 1;
+        }
+
+        /* Vertical Info Bar */
+        .info-bar {
+            position: absolute;
+            right: 3rem;
+            top: 50%;
+            transform: translateY(-50%) rotate(90deg);
+            transform-origin: center;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--navy);
+            opacity: 0.4;
+            white-space: nowrap;
+        }
+
+        /* Page 1: Cover */
+        .cover {
+            justify-content: center;
+            align-items: flex-start;
+            padding-left: 8rem;
+        }
+
+        .cover-logo {
+            width: 100px;
+            height: auto;
+            margin-bottom: 2rem;
+            filter: grayscale(20%) contrast(1.1);
+        }
+
+        .cover-tag {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 400;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--red);
+            margin-bottom: 1rem;
+            position: relative;
+            padding-left: 3rem;
+        }
+
+        .cover-tag::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 2rem;
+            height: 2px;
+            background: var(--red);
+        }
+
+        .cover h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 8rem;
+            font-weight: 400;
+            line-height: 0.9;
+            text-transform: uppercase;
+            color: var(--navy);
+            margin-bottom: 1rem;
+            max-width: 750px;
+        }
+
+        .cover h1 span {
+            color: var(--red);
+            font-style: italic;
+        }
+
+        .cover-subtitle {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.25rem;
+            color: var(--black-matte);
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            opacity: 0.6;
+            margin-bottom: 3rem;
+        }
+
+        .cover-author {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.875rem;
+            color: var(--black-matte);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            padding: 0.75rem 1.5rem;
+            border: 2px solid var(--navy);
+            display: inline-block;
+        }
+
+        /* Spray Paint Edge Effect */
+        .spray-edge {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            pointer-events: none;
+            opacity: 0.08;
+        }
+
+        .spray-edge-1 {
+            top: -50px;
+            right: -50px;
+            background: radial-gradient(ellipse at center, var(--red) 0%, transparent 70%);
+        }
+
+        .spray-edge-2 {
+            bottom: -100px;
+            left: -100px;
+            background: radial-gradient(ellipse at center, var(--navy) 0%, transparent 70%);
+        }
+
+        /* Page Headers */
+        .page-header {
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            left: -4rem;
+            top: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--red);
+        }
+
+        .page-header h2 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 4rem;
+            font-weight: 400;
+            line-height: 1;
+            text-transform: uppercase;
+            color: var(--navy);
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header h2 span {
+            color: var(--red);
+            font-style: italic;
+        }
+
+        .page-header .subtitle {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--black-matte);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            opacity: 0.6;
+        }
+
+        /* Content Layout */
+        .content {
+            flex: 1;
+            display: flex;
+            gap: 4rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .content-left {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .content-right {
+            flex: 1.2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Stats */
+        .stat-large {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 9rem;
+            color: var(--red);
+            line-height: 1;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--black-matte);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 2rem;
+            opacity: 0.7;
+        }
+
+        /* Bullet Points */
+        .points {
+            list-style: none;
+        }
+
+        .points li {
+            padding: 0.85rem 0;
+            padding-left: 2rem;
+            position: relative;
+            font-family: 'Inter', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 300;
+            color: var(--black-matte);
+            border-bottom: 1px solid var(--grid-line);
+        }
+
+        .points li:last-child {
+            border-bottom: none;
+        }
+
+        .points li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 1rem;
+            width: 12px;
+            height: 3px;
+            background: var(--red);
+        }
+
+        .points li strong {
+            color: var(--navy);
+            font-weight: 600;
+        }
+
+        /* Calendar Heatmap */
+        .calendar-heatmap {
+            display: grid;
+            grid-template-columns: repeat(53, 1fr);
+            gap: 2px;
+            padding: 1.5rem;
+            background: var(--white);
+            border: 2px solid var(--navy);
+            width: 100%;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            background: var(--bg-darker);
+            min-width: 6px;
+        }
+
+        .calendar-day.match {
+            background: var(--red);
+        }
+
+        .calendar-legend {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1rem;
+            justify-content: flex-start;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--black-matte);
+            opacity: 0.7;
+        }
+
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+        }
+
+        .legend-dot.match {
+            background: var(--red);
+        }
+
+        .legend-dot.silent {
+            background: var(--bg-darker);
+            border: 1px solid var(--grid-line);
+        }
+
+        /* Ecosystem Diagram */
+        .ecosystem {
+            width: 100%;
+            padding: 1rem 0;
+        }
+
+        .ecosystem-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+        }
+
+        .ecosystem-item {
+            background: var(--white);
+            border: 2px solid var(--navy);
+            padding: 1.25rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .ecosystem-item::after {
+            content: '→';
+            position: absolute;
+            right: -1.25rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1rem;
+            color: var(--navy);
+            opacity: 0.3;
+        }
+
+        .ecosystem-item:nth-child(4)::after,
+        .ecosystem-item:nth-child(8)::after {
+            display: none;
+        }
+
+        .ecosystem-icon {
+            font-size: 1.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .ecosystem-name {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            color: var(--navy);
+            margin-bottom: 0.25rem;
+        }
+
+        .ecosystem-desc {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--black-matte);
+            opacity: 0.6;
+        }
+
+        .ecosystem-gap {
+            grid-column: 1 / -1;
+            height: 3px;
+            background: var(--red);
+            margin: 1rem 0;
+        }
+
+        .ecosystem-question {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 1.5rem;
+            background: var(--navy);
+            color: var(--white);
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.4rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .ecosystem-question strong {
+            color: var(--yellow);
+        }
+
+        /* Architecture Diagram */
+        .architecture {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .arch-layer {
+            width: 100%;
+            max-width: 450px;
+            padding: 1.5rem 2rem;
+            text-align: center;
+            position: relative;
+            border: 3px solid var(--navy);
+            background: var(--white);
+        }
+
+        .arch-layer.brain {
+            background: var(--red);
+            border-color: var(--red);
+            color: var(--white);
+        }
+
+        .arch-layer.body {
+            background: var(--white);
+        }
+
+        .arch-layer.delivery {
+            background: var(--navy);
+            color: var(--white);
+        }
+
+        .arch-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            opacity: 0.7;
+            margin-bottom: 0.25rem;
+        }
+
+        .arch-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.65rem;
+            text-transform: uppercase;
+        }
+
+        .arch-desc {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            opacity: 0.7;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .arch-layer.brain .arch-desc,
+        .arch-layer.delivery .arch-desc {
+            opacity: 0.8;
+        }
+
+        .arch-arrow {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            color: var(--navy);
+        }
+
+        /* Flow Diagram */
+        .flow-container {
+            width: 100%;
+            padding: 1rem 0;
+        }
+
+        .flow {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .flow-step {
+            flex: 1;
+            background: var(--white);
+            border: 2px solid var(--navy);
+            padding: 1.25rem 1rem;
+            text-align: center;
+        }
+
+        .flow-step.highlight {
+            background: var(--red);
+            border-color: var(--red);
+            color: var(--white);
+        }
+
+        .flow-step-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .flow-step-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.15rem;
+            text-transform: uppercase;
+            margin-bottom: 0.25rem;
+        }
+
+        .flow-step-desc {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            opacity: 0.7;
+        }
+
+        .flow-step.highlight .flow-step-desc {
+            opacity: 0.9;
+        }
+
+        .flow-arrow {
+            font-family: 'Bebas Neue', sans-serif;
+            color: var(--navy);
+            font-size: 1.25rem;
+        }
+
+        /* Logic Table */
+        .logic-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            border: 2px solid var(--navy);
+        }
+
+        .logic-table th,
+        .logic-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--grid-line);
+        }
+
+        .logic-table th {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1rem;
+            text-transform: uppercase;
+            color: var(--white);
+            background: var(--navy);
+        }
+
+        .logic-table td {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 300;
+            background: var(--white);
+        }
+
+        .logic-table td:first-child {
+            color: var(--black-matte);
+            opacity: 0.8;
+        }
+
+        .logic-table td:last-child {
+            color: var(--red);
+            font-weight: 600;
+        }
+
+        /* Studios Layout */
+        .studios-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            width: 100%;
+        }
+
+        .studios-card {
+            background: var(--white);
+            border: 2px solid var(--navy);
+            padding: 1.5rem;
+        }
+
+        .studios-card.featured {
+            grid-column: 1 / -1;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            background: var(--navy);
+            color: var(--white);
+        }
+
+        .studios-icon {
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .studios-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.4rem;
+            text-transform: uppercase;
+            color: var(--navy);
+            margin-bottom: 0.5rem;
+        }
+
+        .studios-card.featured .studios-title {
+            color: var(--yellow);
+        }
+
+        .studios-desc {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            opacity: 0.7;
+        }
+
+        .studios-card.featured .studios-icon {
+            font-size: 3rem;
+            margin-bottom: 0;
+        }
+
+        /* Stats Row */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .stat-box {
+            background: var(--white);
+            border: 2px solid var(--navy);
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .stat-box-value {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.75rem;
+            color: var(--red);
+        }
+
+        .stat-box-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            color: var(--black-matte);
+            opacity: 0.7;
+        }
+
+        /* Journey Cards */
+        .journeys {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            width: 100%;
+        }
+
+        .journey-card {
+            background: var(--white);
+            border: 2px solid var(--navy);
+            padding: 1.25rem;
+        }
+
+        .journey-avatar {
+            width: 48px;
+            height: 48px;
+            background: var(--red);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .journey-name {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.75rem;
+            text-transform: uppercase;
+            color: var(--navy);
+            margin-bottom: 0.25rem;
+        }
+
+        .journey-type {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--red);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--red);
+        }
+
+        .journey-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .journey-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 300;
+            color: var(--black-matte);
+        }
+
+        .journey-step-num {
+            width: 18px;
+            height: 18px;
+            background: var(--navy);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.75rem;
+            flex-shrink: 0;
+        }
+
+        /* Comparison Table */
+        .comparison {
+            width: 100%;
+            background: var(--white);
+            border: 2px solid var(--navy);
+            overflow: hidden;
+        }
+
+        .comparison-header {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            background: var(--navy);
+            color: var(--white);
+        }
+
+        .comparison-header > div {
+            padding: 1rem 1.25rem;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+        }
+
+        .comparison-header > div:last-child {
+            background: var(--red);
+        }
+
+        .comparison-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            border-bottom: 1px solid var(--grid-line);
+        }
+
+        .comparison-row:last-child {
+            border-bottom: none;
+        }
+
+        .comparison-row > div {
+            padding: 0.85rem 1.25rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 300;
+            display: flex;
+            align-items: center;
+        }
+
+        .comparison-row > div:first-child {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .check {
+            color: var(--navy);
+            font-weight: 700;
+        }
+
+        .cross {
+            opacity: 0.3;
+        }
+
+        .comparison-stat {
+            background: var(--navy);
+            padding: 1.5rem;
+            text-align: center;
+            margin: 1rem;
+        }
+
+        .comparison-stat-value {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 4rem;
+            color: var(--yellow);
+        }
+
+        .comparison-stat-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--white);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            opacity: 0.8;
+            margin-top: 0.5rem;
+        }
+
+        /* Financial */
+        .financial-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            width: 100%;
+        }
+
+        .financial-card {
+            background: var(--white);
+            border: 2px solid var(--navy);
+            padding: 1.5rem;
+        }
+
+        .financial-card h4 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.25rem;
+            text-transform: uppercase;
+            color: var(--navy);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 3px solid var(--red);
+        }
+
+        .investment-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--grid-line);
+        }
+
+        .investment-item:last-of-type {
+            border-bottom: none;
+        }
+
+        .investment-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 300;
+            color: var(--black-matte);
+        }
+
+        .investment-value {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.25rem;
+            color: var(--red);
+        }
+
+        .investment-bar {
+            height: 6px;
+            background: var(--bg-darker);
+            margin-top: 0.5rem;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .investment-fill {
+            height: 100%;
+            background: var(--red);
+        }
+
+        .milestone {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .milestone-marker {
+            width: 12px;
+            height: 12px;
+            background: var(--red);
+            margin-top: 0.25rem;
+            flex-shrink: 0;
+        }
+
+        .milestone-content h5 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1rem;
+            text-transform: uppercase;
+            color: var(--navy);
+            margin-bottom: 0.25rem;
+        }
+
+        .milestone-content p {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 300;
+            color: var(--black-matte);
+            opacity: 0.8;
+        }
+
+        .vision-box {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: var(--navy);
+            color: var(--white);
+        }
+
+        .vision-box p {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 300;
+        }
+
+        .vision-box strong {
+            color: var(--yellow);
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        /* Contact Page */
+        .contact-page {
+            justify-content: center;
+            align-items: flex-start;
+            padding-left: 8rem;
+        }
+
+        .contact-content {
+            max-width: 600px;
+        }
+
+        .contact-tag {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--red);
+            margin-bottom: 1rem;
+            position: relative;
+            padding-left: 3rem;
+        }
+
+        .contact-tag::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 2rem;
+            height: 2px;
+            background: var(--red);
+        }
+
+        .contact-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 4.5rem;
+            text-transform: uppercase;
+            color: var(--navy);
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-bio {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 300;
+            color: var(--black-matte);
+            line-height: 1.7;
+            margin-bottom: 2rem;
+        }
+
+        .contact-links {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .contact-link {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--navy);
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border: 2px solid var(--navy);
+            transition: all 0.2s;
+        }
+
+        .contact-link:hover {
+            background: var(--red);
+            border-color: var(--red);
+            color: var(--white);
+        }
+
+        .contact-note {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--black-matte);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            opacity: 0.6;
+            line-height: 1.8;
+        }
+
+        /* Print Styles */
+        @media print {
+            body::before,
+            body::after {
+                display: none;
+            }
+            .page {
+                page-break-after: always;
+                height: 100vh;
+                width: 100vw;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Dynamic Background Elements -->
+    <div class="bg-noise"></div>
+    <div class="bg-grid"></div>
+    <div class="bg-orb bg-orb-1"></div>
+    <div class="bg-orb bg-orb-2"></div>
+    <div class="bg-orb bg-orb-3"></div>
+    <div class="bg-orb bg-orb-4"></div>
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- Spray Paint Effects -->
+    <div class="spray-edge spray-edge-1"></div>
+    <div class="spray-edge spray-edge-2"></div>
+
+    <!-- PAGE 1: Cover -->
+    <section class="page cover">
+        <img src="atletico-logo.png" alt="Atlético Madrid" class="cover-logo">
+        <div class="cover-tag">Strategic Analysis</div>
+        <h1>The <span>350-Day</span> Problem</h1>
+        <p class="cover-subtitle">Redesigning Fan Engagement for Atlético Madrid</p>
+        <p class="cover-author">A strategic analysis by Paolo Giannitti</p>
+        <span class="page-number">01</span>
+        <div class="info-bar">Atlético Madrid — Fan Engagement Strategy — 2026</div>
+    </section>
+
+    <!-- PAGE 2: The Problem -->
+    <section class="page">
+        <div class="page-header">
+            <h2>Atlético plays <span>38 matches</span>. Fans are loyal <span>365 days</span>.</h2>
+        </div>
+        <div class="content">
+            <div class="content-left">
+                <div class="stat-large">~10%</div>
+                <div class="stat-label">Active engagement rate across the season</div>
+                <ul class="points">
+                    <li><strong>Competitors monetize heritage</strong> (Real Madrid) or <strong>scale</strong> (Barcelona). Atlético has neither.</li>
+                    <li><strong>Multiple touchpoints exist</strong> — Atleti Bot, Atleti Cam, Socios, stadium app — but no connective intelligence between them.</li>
+                    <li><strong>Fans get generic blasts.</strong> Sponsors can't measure lift. Club leaves money on the table.</li>
+                </ul>
+            </div>
+            <div class="content-right">
+                <div style="width: 100%;">
+                    <div class="calendar-heatmap" id="calendar"></div>
+                    <div class="calendar-legend">
+                        <div class="legend-item">
+                            <div class="legend-dot match"></div>
+                            <span>Match day (38)</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-dot silent"></div>
+                            <span>Silent day (327)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <span class="page-number">02</span>
+        <div class="info-bar">The Problem — Engagement Gap Analysis</div>
+    </section>
+
+    <!-- PAGE 3: Ecosystem Audit -->
+    <section class="page">
+        <div class="page-header">
+            <h2>Innovation theater <span>without integration</span></h2>
+            <p class="subtitle">The club collects data across every touchpoint but can't answer one question...</p>
+        </div>
+        <div class="content" style="flex-direction: column; justify-content: center;">
+            <div class="ecosystem">
+                <div class="ecosystem-grid">
+                    <div class="ecosystem-item">
+                        <div class="ecosystem-icon">🤖</div>
+                        <div class="ecosystem-name">Atleti Bot</div>
+                        <div class="ecosystem-desc">24/7 AI fan support</div>
+                    </div>
+                    <div class="ecosystem-item">
+                        <div class="ecosystem-icon">📸</div>
+                        <div class="ecosystem-name">Atleti Cam</div>
+                        <div class="ecosystem-desc">AR photo experiences</div>
+                    </div>
+                    <div class="ecosystem-item">
+                        <div class="ecosystem-icon">🪙</div>
+                        <div class="ecosystem-name">Socios Tokens</div>
+                        <div class="ecosystem-desc">Engagement & voting</div>
+                    </div>
+                    <div class="ecosystem-item">
+                        <div class="ecosystem-icon">🏟️</div>
+                        <div class="ecosystem-name">Stadium App</div>
+                        <div class="ecosystem-desc">Match-day services</div>
+                    </div>
+                    <div class="ecosystem-item">
+                        <div class="ecosystem-icon">📱</div>
+                        <div class="ecosystem-name">Social Channels</div>
+                        <div class="ecosystem-desc">Content distribution</div>
+                    </div>
+                    <div class="ecosystem-item">
+                        <div class="ecosystem-icon">📡</div>
+                        <div class="ecosystem-name">Telefónica</div>
+                        <div class="ecosystem-desc">Data infrastructure</div>
+                    </div>
+                    <div class="ecosystem-item">
+                        <div class="ecosystem-icon">🧠</div>
+                        <div class="ecosystem-name">Google Cloud</div>
+                        <div class="ecosystem-desc">AI compute</div>
+                    </div>
+                    <div class="ecosystem-item">
+                        <div class="ecosystem-icon">🏢</div>
+                        <div class="ecosystem-name">Stadium District</div>
+                        <div class="ecosystem-desc">Physical real estate</div>
+                    </div>
+                    <div class="ecosystem-gap"></div>
+                    <div class="ecosystem-question">
+                        "What should we offer <strong>this specific fan</strong>, <strong>right now</strong>?"
+                    </div>
+                </div>
+            </div>
+        </div>
+        <span class="page-number">03</span>
+        <div class="info-bar">Ecosystem Audit — Current State</div>
+    </section>
+
+    <!-- PAGE 4: Strategic Insight -->
+    <section class="page">
+        <div class="page-header">
+            <h2>From touchpoints to <span>intelligence</span></h2>
+            <p class="subtitle">Not another app — the spine that makes every touchpoint contextually relevant</p>
+        </div>
+        <div class="content">
+            <div class="content-left">
+                <ul class="points">
+                    <li><strong>The Brain</strong> ingests fan data streams and runs lightweight ML models to determine contextual recommendations</li>
+                    <li><strong>The Body</strong> delivers personalized experiences through physical and digital venues</li>
+                    <li><strong>The Delivery Layer</strong> extends reach through AR experiences and existing app integrations</li>
+                    <li>Each layer <strong>amplifies the others</strong> — data from Studios improves Engine predictions; Engine targeting drives Studios attendance</li>
+                </ul>
+            </div>
+            <div class="content-right">
+                <div class="architecture">
+                    <div class="arch-layer brain">
+                        <div class="arch-label">Brain</div>
+                        <div class="arch-title">Contextual Fan Intelligence System</div>
+                        <div class="arch-desc">AI context engine powering all recommendations</div>
+                    </div>
+                    <div class="arch-arrow">↓</div>
+                    <div class="arch-layer body">
+                        <div class="arch-label">Body</div>
+                        <div class="arch-title">Atlético Lifestyle Studios</div>
+                        <div class="arch-desc">Physical + digital experience venues</div>
+                    </div>
+                    <div class="arch-arrow">↓</div>
+                    <div class="arch-layer delivery">
+                        <div class="arch-label">Delivery</div>
+                        <div class="arch-title">AR Experiences + App Integrations</div>
+                        <div class="arch-desc">Extended reach through existing touchpoints</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <span class="page-number">04</span>
+        <div class="info-bar">Strategic Framework — System Architecture</div>
+    </section>
+
+    <!-- PAGE 5: Context Engine -->
+    <section class="page">
+        <div class="page-header">
+            <h2>Real-time context → <span>personalized micro-experiences</span></h2>
+        </div>
+        <div class="content" style="flex-direction: column;">
+            <div class="flow-container">
+                <div class="flow">
+                    <div class="flow-step">
+                        <div class="flow-step-icon">📍</div>
+                        <div class="flow-step-title">Data Inputs</div>
+                        <div class="flow-step-desc">Location, app behavior, purchase history, attendance, weather</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step highlight">
+                        <div class="flow-step-icon">⚡</div>
+                        <div class="flow-step-title">ML Classification</div>
+                        <div class="flow-step-desc">Decision trees + collaborative filtering</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step">
+                        <div class="flow-step-icon">🎯</div>
+                        <div class="flow-step-title">Recommendation</div>
+                        <div class="flow-step-desc">"Offer this fan X because of Y context"</div>
+                    </div>
+                </div>
+                <table class="logic-table">
+                    <thead>
+                        <tr>
+                            <th>Fan Context</th>
+                            <th>→</th>
+                            <th>Recommendation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>500m from stadium, 90 min before derby</td>
+                            <td>→</td>
+                            <td>AR photo experience at pop-up + pre-match workshop ticket</td>
+                        </tr>
+                        <tr>
+                            <td>Watching from home, rain, mid-table opponent</td>
+                            <td>→</td>
+                            <td>Exclusive digital drop + watch party invite for next game</td>
+                        </tr>
+                        <tr>
+                            <td>In app 3x this week, no purchases</td>
+                            <td>→</td>
+                            <td>Limited wellness class trial + member priority access</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="text-align: center; margin-top: 1.5rem; font-family: 'Space Mono', monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.6;">
+                    Technical note: Lightweight ML (scikit-learn, decision trees) — not expensive deep learning. Leverages existing Google Cloud partnership.
+                </p>
+            </div>
+        </div>
+        <span class="page-number">05</span>
+        <div class="info-bar">Context Engine — How It Works</div>
+    </section>
+
+    <!-- PAGE 6: Lifestyle Studios -->
+    <section class="page">
+        <div class="page-header">
+            <h2>Where intelligence becomes <span>experience</span></h2>
+            <p class="subtitle">Not just a venue — the physical manifestation of the intelligence system</p>
+        </div>
+        <div class="content" style="flex-direction: column; justify-content: center;">
+            <div class="studios-grid">
+                <div class="studios-card featured">
+                    <div class="studios-icon">🏛️</div>
+                    <div>
+                        <div class="studios-title">200-300m² Flagship + Rotating Pop-ups</div>
+                        <div class="studios-desc">Near Metropolitano stadium. Month-to-month leases for flexibility. AI-gated access determines who gets invited to what, when.</div>
+                    </div>
+                </div>
+                <div class="studios-card">
+                    <div class="studios-icon">💪</div>
+                    <div class="studios-title">Vithas Wellness</div>
+                    <div class="studios-desc">Recovery sessions, health workshops</div>
+                </div>
+                <div class="studios-card">
+                    <div class="studios-icon">👕</div>
+                    <div class="studios-title">AlphaTauri Drops</div>
+                    <div class="studios-desc">Limited fashion releases</div>
+                </div>
+                <div class="studios-card">
+                    <div class="studios-icon">🤖</div>
+                    <div class="studios-title">Google AI Demos</div>
+                    <div class="studios-desc">Interactive tech experiences</div>
+                </div>
+            </div>
+            <div class="stats-row">
+                <div class="stat-box">
+                    <div class="stat-box-value">€15-50</div>
+                    <div class="stat-box-label">Monthly memberships</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-box-value">€50K</div>
+                    <div class="stat-box-label">Per sponsor activation</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-box-value">20%</div>
+                    <div class="stat-box-label">Limited drops margin</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-box-value">B2B2C</div>
+                    <div class="stat-box-label">Sponsors pay for qualified audiences</div>
+                </div>
+            </div>
+        </div>
+        <span class="page-number">06</span>
+        <div class="info-bar">Lifestyle Studios — Physical Layer</div>
+    </section>
+
+    <!-- PAGE 7: Fan Journeys -->
+    <section class="page">
+        <div class="page-header">
+            <h2>Three fans. Three contexts. <span>Three experiences.</span></h2>
+        </div>
+        <div class="content" style="align-items: flex-start;">
+            <div class="journeys">
+                <div class="journey-card">
+                    <div class="journey-avatar">👩</div>
+                    <div class="journey-name">María</div>
+                    <div class="journey-type">Stadium Loyalist</div>
+                    <div class="journey-steps">
+                        <div class="journey-step">
+                            <div class="journey-step-num">1</div>
+                            <span>Context Engine detects proximity to stadium</span>
+                        </div>
+                        <div class="journey-step">
+                            <div class="journey-step-num">2</div>
+                            <span>Receives Studios AR scavenger hunt invite</span>
+                        </div>
+                        <div class="journey-step">
+                            <div class="journey-step-num">3</div>
+                            <span>Checks in at Studios, purchases limited merch drop</span>
+                        </div>
+                        <div class="journey-step">
+                            <div class="journey-step-num">4</div>
+                            <span>Shares AR photo on social media</span>
+                        </div>
+                        <div class="journey-step">
+                            <div class="journey-step-num">5</div>
+                            <span>Engine logs engagement for future targeting</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="journey-card">
+                    <div class="journey-avatar">👨</div>
+                    <div class="journey-name">Javi</div>
+                    <div class="journey-type">International Remote Fan</div>
+                    <div class="journey-steps">
+                        <div class="journey-step">
+                            <div class="journey-step-num">1</div>
+                            <span>Rain day, watching match from home abroad</span>
+                        </div>
+                        <div class="journey-step">
+                            <div class="journey-step-num">2</div>
+                            <span>Receives exclusive virtual product drop</span>
+                        </div>
+                        <div class="journey-step">
+                            <div class="journey-step-num">3</div>
+                            <span>Attends AR-enhanced livestream experience</span>
+                        </div>
+                        <div class="journey-step">
+                            <div class="journey-step-num">4</div>
+                            <span>Joins watch party signup for next away game</span>
+                        </div>
+                        <div class="journey-step">
+                            <div class="journey-step-num">5</div>
+                            <span>Flagged for in-person Studios invite when visiting Madrid</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="journey-card">
+                    <div class="journey-avatar">👩‍👧</div>
+                    <div class="journey-name">Laura</div>
+                    <div class="journey-type">Untapped Family Segment</div>
+                    <div class="journey-steps">
+                        <div class="journey-step">
+                            <div class="journey-step-num">1</div>
+                            <span>Bought kids' tickets 3x, never engaged digitally</span>
+                        </div>
+                        <div class="journey-step">
+                            <div class="journey-step-num">2</div>
+                            <span>Trigger: "Family wellness day at Studios"</span>
+                        </div>
+                        <div class="journey-step">
+                            <div class="journey-step-num">3</div>
+                            <span>Kids' clinic with youth coaches + parent recovery</span>
+                        </div>
+                        <div class="journey-step">
+                            <div class="journey-step-num">4</div>
+                            <span>Vithas sponsors the activation</span>
+                        </div>
+                        <div class="journey-step">
+                            <div class="journey-step-num">5</div>
+                            <span>Laura becomes a Studios member</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <span class="page-number">07</span>
+        <div class="info-bar">Fan Journeys — Persona Scenarios</div>
+    </section>
+
+    <!-- PAGE 8: Competitive Proof -->
+    <section class="page">
+        <div class="page-header">
+            <h2>Chelsea proved the model. <span>Atlético can surpass it.</span></h2>
+        </div>
+        <div class="content">
+            <div class="content-left">
+                <div class="comparison-stat">
+                    <div class="comparison-stat-value">$1.4M</div>
+                    <div class="comparison-stat-label">Chelsea Fifth ARR with NO AI, NO studios, NO targeting</div>
+                </div>
+                <ul class="points">
+                    <li><strong>Chelsea Fifth</strong> launched 2023 with 12,000 members globally @ $10/month</li>
+                    <li>Just digital content subscriptions — <strong>no personalization, no physical venues</strong></li>
+                    <li>If basic subscriptions generate this revenue, what does <strong>intelligence + physical activation</strong> generate?</li>
+                </ul>
+            </div>
+            <div class="content-right">
+                <div class="comparison">
+                    <div class="comparison-header">
+                        <div>Capability</div>
+                        <div>Chelsea Fifth</div>
+                        <div>Atlético Engine</div>
+                    </div>
+                    <div class="comparison-row">
+                        <div>AI Targeting</div>
+                        <div><span class="cross">✕</span></div>
+                        <div><span class="check">✓</span> Telefónica + Google</div>
+                    </div>
+                    <div class="comparison-row">
+                        <div>Physical Studios</div>
+                        <div><span class="cross">✕</span></div>
+                        <div><span class="check">✓</span> Stadium District</div>
+                    </div>
+                    <div class="comparison-row">
+                        <div>Sponsor Integration</div>
+                        <div>Limited</div>
+                        <div><span class="check">✓</span> Vithas, Hyundai, AlphaTauri</div>
+                    </div>
+                    <div class="comparison-row">
+                        <div>Members Year 1</div>
+                        <div>12,000</div>
+                        <div>2,000 (higher LTV)</div>
+                    </div>
+                    <div class="comparison-row">
+                        <div>Revenue Model</div>
+                        <div>Subscription only</div>
+                        <div>Multi-stream B2B2C</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <span class="page-number">08</span>
+        <div class="info-bar">Competitive Analysis — Market Proof</div>
+    </section>
+
+    <!-- PAGE 9: Financial Framework -->
+    <section class="page">
+        <div class="page-header">
+            <h2><span>€850K</span> to prove the system</h2>
+            <p class="subtitle">18-month runway to validation and break-even</p>
+        </div>
+        <div class="content">
+            <div class="financial-grid">
+                <div class="financial-card">
+                    <h4>Investment Allocation</h4>
+                    <div class="investment-item">
+                        <span class="investment-label">Studios buildout (flagship + 2 pop-ups)</span>
+                        <span class="investment-value">€400K</span>
+                    </div>
+                    <div class="investment-bar"><div class="investment-fill" style="width: 47%;"></div></div>
+
+                    <div class="investment-item">
+                        <span class="investment-label">Context Engine MVP (engineers + ML ops)</span>
+                        <span class="investment-value">€250K</span>
+                    </div>
+                    <div class="investment-bar"><div class="investment-fill" style="width: 29%;"></div></div>
+
+                    <div class="investment-item">
+                        <span class="investment-label">AR content + integration</span>
+                        <span class="investment-value">€150K</span>
+                    </div>
+                    <div class="investment-bar"><div class="investment-fill" style="width: 18%;"></div></div>
+
+                    <div class="investment-item">
+                        <span class="investment-label">Go-to-market (2K early adopters)</span>
+                        <span class="investment-value">€50K</span>
+                    </div>
+                    <div class="investment-bar"><div class="investment-fill" style="width: 6%;"></div></div>
+                </div>
+
+                <div class="financial-card">
+                    <h4>Milestones</h4>
+                    <div class="milestone">
+                        <div class="milestone-marker"></div>
+                        <div class="milestone-content">
+                            <h5>Month 6</h5>
+                            <p>500 Studios members + 3 sponsor activations</p>
+                        </div>
+                    </div>
+                    <div class="milestone">
+                        <div class="milestone-marker"></div>
+                        <div class="milestone-content">
+                            <h5>Month 12</h5>
+                            <p>2,000 members + Context Engine v2 automating 80% of recommendations</p>
+                        </div>
+                    </div>
+                    <div class="milestone">
+                        <div class="milestone-marker"></div>
+                        <div class="milestone-content">
+                            <h5>Month 18</h5>
+                            <p>Break-even + licensing Context Engine to other LaLiga clubs</p>
+                        </div>
+                    </div>
+                    <div class="vision-box">
+                        <p><strong>5-Year Vision:</strong> Atlético becomes lifestyle infrastructure provider for mid-tier football clubs globally. Context Engine licensed to 15+ clubs.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <span class="page-number">09</span>
+        <div class="info-bar">Financial Framework — Investment & Milestones</div>
+    </section>
+
+    <!-- PAGE 10: About / Contact -->
+    <section class="page contact-page">
+        <div class="contact-content">
+            <div class="contact-tag">About This Analysis</div>
+            <h3 class="contact-title">Paolo Giannitti</h3>
+            <p class="contact-bio">
+                Creative strategist with a background in sports business, digital transformation, and visual storytelling across five countries. I build content systems that connect strategy to execution — not one-off campaigns, but frameworks that scale.
+            </p>
+            <div class="contact-links">
+                <a href="mailto:paolog00@icloud.com" class="contact-link">Email</a>
+                <a href="https://www.linkedin.com/in/paolo-giannitti-1bbb2b21b" class="contact-link">LinkedIn</a>
+                <a href="#" class="contact-link">Portfolio</a>
+            </div>
+            <p class="contact-note">
+                This analysis was developed as part of independent strategic research during my MSc in Global Sports Business Management & Digital Transformation at ESBS Madrid.
+            </p>
+        </div>
+        <span class="page-number">10</span>
+        <div class="info-bar">Contact — Paolo Giannitti</div>
+    </section>
+
+    <script>
+        // Generate calendar heatmap
+        const calendar = document.getElementById('calendar');
+        const totalDays = 365;
+        const matchDays = [7, 14, 21, 28, 35, 42, 56, 63, 70, 77, 84, 91, 105, 112, 119, 126, 140, 147, 154, 161, 168, 175, 189, 196, 203, 210, 224, 231, 238, 245, 252, 259, 273, 280, 287, 294, 308, 315];
+
+        for (let i = 0; i < totalDays; i++) {
+            const day = document.createElement('div');
+            day.className = 'calendar-day';
+            if (matchDays.includes(i)) {
+                day.classList.add('match');
+            }
+            calendar.appendChild(day);
+        }
+
+        // Dynamic Particles System
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Particle class - styled for retro sports aesthetic
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 3 + 1;
+                this.speedX = (Math.random() - 0.5) * 0.6;
+                this.speedY = (Math.random() - 0.5) * 0.6;
+                this.opacity = Math.random() * 0.5 + 0.2;
+                this.fadeDirection = Math.random() > 0.5 ? 1 : -1;
+                this.fadeSpeed = Math.random() * 0.004 + 0.002;
+
+                // Colors matching the retro sports palette
+                const colors = [
+                    { r: 200, g: 16, b: 46 },   // Red #C8102E
+                    { r: 0, g: 32, b: 91 },     // Navy #00205B
+                    { r: 255, g: 215, b: 0 },   // Yellow #FFD700
+                    { r: 26, g: 26, b: 26 },    // Black matte
+                ];
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                // Fade in and out
+                this.opacity += this.fadeDirection * this.fadeSpeed;
+                if (this.opacity >= 0.7) {
+                    this.fadeDirection = -1;
+                } else if (this.opacity <= 0.1) {
+                    this.fadeDirection = 1;
+                }
+
+                // Wrap around edges
+                if (this.x < 0) this.x = canvas.width;
+                if (this.x > canvas.width) this.x = 0;
+                if (this.y < 0) this.y = canvas.height;
+                if (this.y > canvas.height) this.y = 0;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, ${this.opacity})`;
+                ctx.fill();
+            }
+        }
+
+        // Create particles
+        const particles = [];
+        const particleCount = 80;
+
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        // Connection lines between nearby particles
+        function drawConnections() {
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < 150) {
+                        const opacity = (1 - distance / 150) * 0.15;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.strokeStyle = `rgba(0, 32, 91, ${opacity})`;
+                        ctx.lineWidth = 0.8;
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        // Rising sparks effect
+        class Spark {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height + 10;
+                this.size = Math.random() * 1.5 + 0.3;
+                this.speedY = -(Math.random() * 0.8 + 0.3);
+                this.speedX = (Math.random() - 0.5) * 0.3;
+                this.opacity = Math.random() * 0.5 + 0.2;
+                this.life = Math.random() * 250 + 100;
+                this.maxLife = this.life;
+            }
+
+            update() {
+                this.y += this.speedY;
+                this.x += this.speedX;
+                this.life--;
+                this.opacity = (this.life / this.maxLife) * 0.6;
+
+                if (this.life <= 0 || this.y < -10) {
+                    this.reset();
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(200, 16, 46, ${this.opacity})`;
+                ctx.fill();
+            }
+        }
+
+        const sparks = [];
+        for (let i = 0; i < 30; i++) {
+            const spark = new Spark();
+            spark.y = Math.random() * canvas.height;
+            sparks.push(spark);
+        }
+
+        // Animation loop
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            drawConnections();
+
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+
+            sparks.forEach(spark => {
+                spark.update();
+                spark.draw();
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>
