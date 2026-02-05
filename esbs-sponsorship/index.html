@@ -236,8 +236,8 @@
         }
 
         @keyframes particleFade {
-            0%, 100% { opacity: 0; }
-            50% { opacity: 0.5; }
+            0%, 100% { opacity: 0.1; }
+            50% { opacity: 0.7; }
         }
 
         @keyframes floatParticle {
@@ -2497,10 +2497,11 @@
                 const particle = document.createElement('div');
                 particle.className = 'bg-particle';
                 particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
                 particle.style.width = (Math.random() * 4 + 2) + 'px';
                 particle.style.height = particle.style.width;
-                particle.style.animationDelay = Math.random() * 20 + 's';
-                particle.style.animationDuration = (Math.random() * 15 + 15) + 's';
+                particle.style.animationDelay = Math.random() * 12 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 8) + 's';
                 container.appendChild(particle);
             }
         }
