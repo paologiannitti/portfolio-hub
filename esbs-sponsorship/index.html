@@ -230,8 +230,7 @@
             position: absolute;
             background: var(--gold);
             border-radius: 50%;
-            opacity: 0;
-            animation: floatParticle 20s infinite;
+            opacity: 0.4;
         }
 
         @keyframes floatParticle {
@@ -246,7 +245,6 @@
             border-radius: 50%;
             filter: blur(100px);
             opacity: 0.3;
-            animation: orbMove 30s ease-in-out infinite;
         }
 
         .bg-orb-1 {
@@ -1479,9 +1477,7 @@
         }
 
         .coffee-bean {
-            position: absolute;
-            opacity: 0;
-            animation: floatBean 25s infinite linear;
+            display: none;
         }
 
         .coffee-bean svg {
@@ -1515,14 +1511,7 @@
         }
 
         .steam {
-            position: absolute;
-            bottom: 0;
-            width: 8px;
-            height: 80px;
-            background: linear-gradient(to top, rgba(255,255,255,0.4), transparent);
-            border-radius: 50%;
-            filter: blur(8px);
-            animation: steamRise 4s infinite ease-out;
+            display: none;
         }
 
         .steam:nth-child(1) { left: 20%; animation-delay: 0s; }
@@ -1546,9 +1535,7 @@
         }
 
         .floating-cup {
-            position: absolute;
-            opacity: 0.15;
-            animation: floatCup 30s infinite ease-in-out;
+            display: none;
         }
 
         .floating-cup svg {
