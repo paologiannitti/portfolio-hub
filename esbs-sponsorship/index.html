@@ -2576,27 +2576,37 @@
             document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
         }
 
-        // Number animation
+        // Number animation - smooth with requestAnimationFrame and easing
         function animateNumbers() {
             const numbers = document.querySelectorAll('[data-count]');
+
+            // Ease-out cubic for smooth deceleration
+            const easeOutCubic = t => 1 - Math.pow(1 - t, 3);
+
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         const target = parseInt(entry.target.dataset.count);
                         const duration = 2000;
-                        const step = target / (duration / 16);
-                        let current = 0;
+                        let startTime = null;
 
-                        const timer = setInterval(() => {
-                            current += step;
-                            if (current >= target) {
-                                entry.target.textContent = target.toLocaleString();
-                                clearInterval(timer);
+                        function animate(currentTime) {
+                            if (!startTime) startTime = currentTime;
+                            const elapsed = currentTime - startTime;
+                            const progress = Math.min(elapsed / duration, 1);
+                            const easedProgress = easeOutCubic(progress);
+                            const current = Math.floor(target * easedProgress);
+
+                            entry.target.textContent = current.toLocaleString();
+
+                            if (progress < 1) {
+                                requestAnimationFrame(animate);
                             } else {
-                                entry.target.textContent = Math.floor(current).toLocaleString();
+                                entry.target.textContent = target.toLocaleString();
                             }
-                        }, 16);
+                        }
 
+                        requestAnimationFrame(animate);
                         observer.unobserve(entry.target);
                     }
                 });
