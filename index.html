@@ -139,15 +139,6 @@
             perspective: 1200px;
         }
 
-        .project-card {
-            transform-style: preserve-3d;
-        }
-
-        /* Magnetic button base */
-        .btn {
-            will-change: transform;
-        }
-
         /* Subtle grain overlay — lightweight CSS noise pattern */
         .grain-overlay {
             position: fixed;
@@ -155,11 +146,10 @@
             left: 0;
             width: 100%;
             height: 100%;
-            opacity: 0.035;
+            opacity: 0.05;
             pointer-events: none;
             z-index: 50;
             background: repeating-conic-gradient(rgba(28,25,23,0.06) 0% 25%, transparent 0% 50%) 0 0 / 4px 4px;
-            mix-blend-mode: multiply;
         }
 
         /* ═══════════════════════════════
@@ -1210,7 +1200,16 @@
         .marquee-track {
             display: flex;
             white-space: nowrap;
-            will-change: transform;
+            animation: marquee-scroll 32s linear infinite;
+        }
+
+        .marquee-track:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes marquee-scroll {
+            from { transform: translateX(0); }
+            to   { transform: translateX(-50%); }
         }
 
         .marquee-content {
@@ -1245,12 +1244,7 @@
             font-variant-numeric: tabular-nums;
         }
 
-        /* ═══════════════════════════════
-           Portrait Parallax
-           ═══════════════════════════════ */
-        .hero-portrait-frame {
-            will-change: transform;
-        }
+        /* Portrait Parallax — will-change applied via JS only when active */
 
         /* ═══════════════════════════════
            Responsive — Tablet
@@ -2042,6 +2036,22 @@
             var glowX = 0, glowY = 0, curGlowX = 0, curGlowY = 0;
             var glowActive = false;
 
+            var glowRaf = null;
+
+            function tickGlow() {
+                curGlowX = lerp(curGlowX, glowX, 0.08);
+                curGlowY = lerp(curGlowY, glowY, 0.08);
+                cursorGlow.style.left = curGlowX + 'px';
+                cursorGlow.style.top = curGlowY + 'px';
+                if (Math.abs(curGlowX - glowX) > 0.5 || Math.abs(curGlowY - glowY) > 0.5) {
+                    glowRaf = requestAnimationFrame(tickGlow);
+                } else {
+                    cursorGlow.style.left = glowX + 'px';
+                    cursorGlow.style.top = glowY + 'px';
+                    glowRaf = null;
+                }
+            }
+
             document.addEventListener('mousemove', function (e) {
                 glowX = e.clientX;
                 glowY = e.clientY;
@@ -2049,6 +2059,7 @@
                     glowActive = true;
                     cursorGlow.classList.add('active');
                 }
+                if (!glowRaf) glowRaf = requestAnimationFrame(tickGlow);
             });
 
             document.addEventListener('mouseleave', function () {
@@ -2074,8 +2085,6 @@
             if (portraitFrame) {
                 parallaxItems.push({ el: portraitFrame, speed: 0.035, max: 40, current: 0 });
             }
-
-            var currentProgress = 0;
 
             /* ═══════════════════════════════════════
                STAT COUNTING
@@ -2107,63 +2116,38 @@
             if (statsGrid) statsObserver.observe(statsGrid);
 
             /* ═══════════════════════════════════════
-               MARQUEE setup
+               SCROLL-DRIVEN UPDATES
+               (scroll progress + parallax — idle when not scrolling)
                ═══════════════════════════════════════ */
-            var marqueeTrack = document.querySelector('.marquee-track');
-            var marqueePos = 0;
-            var marqueeSpeed = 0.5;
-            var marqueePaused = false;
-            var halfWidth = 0;
+            var scrollTicking = false;
 
-            if (marqueeTrack) {
-                function measureMarquee() {
-                    var fc = marqueeTrack.querySelector('.marquee-content');
-                    if (fc) halfWidth = fc.offsetWidth;
-                }
-                measureMarquee();
-                window.addEventListener('resize', measureMarquee);
-                marqueeTrack.addEventListener('mouseenter', function () { marqueePaused = true; });
-                marqueeTrack.addEventListener('mouseleave', function () { marqueePaused = false; });
-            }
-
-            /* ═══════════════════════════════════════
-               UNIFIED ANIMATION LOOP
-               (glow + parallax + scroll bar + marquee)
-               ═══════════════════════════════════════ */
-            function mainLoop() {
-                /* Cursor glow */
-                curGlowX = lerp(curGlowX, glowX, 0.06);
-                curGlowY = lerp(curGlowY, glowY, 0.06);
-                cursorGlow.style.left = curGlowX + 'px';
-                cursorGlow.style.top = curGlowY + 'px';
-
-                /* Scroll progress */
+            function flushScroll() {
+                scrollTicking = false;
+                var sy = window.scrollY;
                 var docH = document.documentElement.scrollHeight - window.innerHeight;
-                var targetProgress = docH > 0 ? (window.scrollY / docH) * 100 : 0;
-                currentProgress = lerp(currentProgress, targetProgress, 0.1);
-                scrollProgress.style.width = currentProgress.toFixed(1) + '%';
+                scrollProgress.style.width = (docH > 0 ? (sy / docH) * 100 : 0).toFixed(1) + '%';
 
-                /* Parallax */
                 var viewH = window.innerHeight;
-                parallaxItems.forEach(function (item) {
-                    var rect = item.el.getBoundingClientRect();
+                /* Batch-read rects first, then batch-write transforms */
+                var rects = parallaxItems.map(function (item) {
+                    return item.el.getBoundingClientRect();
+                });
+                parallaxItems.forEach(function (item, i) {
+                    var rect = rects[i];
                     if (rect.top < viewH + 100 && rect.bottom > -100) {
                         var target = Math.max(-item.max, Math.min(item.max, (rect.top - viewH / 2) * item.speed));
-                        item.current = lerp(item.current, target, 0.08);
-                        item.el.style.transform = 'translateY(' + item.current.toFixed(1) + 'px)';
+                        item.current = target;
+                        item.el.style.transform = 'translateY(' + target.toFixed(1) + 'px)';
                     }
                 });
-
-                /* Marquee */
-                if (marqueeTrack && !marqueePaused && halfWidth > 0) {
-                    marqueePos += marqueeSpeed;
-                    if (marqueePos >= halfWidth) marqueePos -= halfWidth;
-                    marqueeTrack.style.transform = 'translateX(' + (-halfWidth + marqueePos) + 'px)';
-                }
-
-                requestAnimationFrame(mainLoop);
             }
-            requestAnimationFrame(mainLoop);
+
+            window.addEventListener('scroll', function () {
+                if (!scrollTicking) {
+                    scrollTicking = true;
+                    requestAnimationFrame(flushScroll);
+                }
+            }, { passive: true });
 
             /* ═══════════════════════════════════════
                PAGE EXIT ANIMATION
