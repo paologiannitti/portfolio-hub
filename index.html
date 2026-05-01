@@ -116,23 +116,6 @@
             transform-origin: left;
         }
 
-        /* Cursor glow */
-        .cursor-glow {
-            position: fixed;
-            width: 400px;
-            height: 400px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(190, 90, 56, 0.14) 0%, rgba(190, 90, 56, 0.04) 40%, transparent 70%);
-            pointer-events: none;
-            z-index: 1;
-            transform: translate(-50%, -50%);
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-
-        .cursor-glow.active {
-            opacity: 1;
-        }
 
         /* 3D tilt cards need perspective on parent */
         .projects-grid {
@@ -1417,9 +1400,6 @@
                 height: 40px;
             }
 
-            .cursor-glow {
-                display: none;
-            }
 
             .marquee-content span {
                 font-size: 0.9rem;
@@ -1475,7 +1455,6 @@
     <a href="#main" class="skip-link">Skip to content</a>
 
     <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
-    <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
     <div class="page-exit" id="pageExit" aria-hidden="true"></div>
 
     <!-- Back to top -->
@@ -1791,7 +1770,6 @@
             var heroSection = document.getElementById('hero');
             var portraitFrame = document.getElementById('portraitFrame');
             var scrollProgress = document.getElementById('scrollProgress');
-            var cursorGlow = document.getElementById('cursorGlow');
             var heroHeadline = document.getElementById('heroHeadline');
             var navLinks = document.querySelectorAll('.nav-links a');
             var sections = document.querySelectorAll('section[id]');
@@ -2033,39 +2011,6 @@
             /* ═══════════════════════════════════════
                CURSOR GLOW (lerped)
                ═══════════════════════════════════════ */
-            var glowX = 0, glowY = 0, curGlowX = 0, curGlowY = 0;
-            var glowActive = false;
-
-            var glowRaf = null;
-
-            function tickGlow() {
-                curGlowX = lerp(curGlowX, glowX, 0.08);
-                curGlowY = lerp(curGlowY, glowY, 0.08);
-                cursorGlow.style.left = curGlowX + 'px';
-                cursorGlow.style.top = curGlowY + 'px';
-                if (Math.abs(curGlowX - glowX) > 0.5 || Math.abs(curGlowY - glowY) > 0.5) {
-                    glowRaf = requestAnimationFrame(tickGlow);
-                } else {
-                    cursorGlow.style.left = glowX + 'px';
-                    cursorGlow.style.top = glowY + 'px';
-                    glowRaf = null;
-                }
-            }
-
-            document.addEventListener('mousemove', function (e) {
-                glowX = e.clientX;
-                glowY = e.clientY;
-                if (!glowActive) {
-                    glowActive = true;
-                    cursorGlow.classList.add('active');
-                }
-                if (!glowRaf) glowRaf = requestAnimationFrame(tickGlow);
-            });
-
-            document.addEventListener('mouseleave', function () {
-                glowActive = false;
-                cursorGlow.classList.remove('active');
-            });
 
             /* ═══════════════════════════════════════
                PARALLAX + SCROLL PROGRESS + GLOW
@@ -2073,15 +2018,6 @@
                ═══════════════════════════════════════ */
             var parallaxItems = [];
 
-            document.querySelectorAll('.section-header h2').forEach(function (el) {
-                parallaxItems.push({ el: el, speed: 0.03, max: 25, current: 0 });
-            });
-            document.querySelectorAll('.about-text h2').forEach(function (el) {
-                parallaxItems.push({ el: el, speed: 0.025, max: 20, current: 0 });
-            });
-            document.querySelectorAll('.stat-item').forEach(function (el, i) {
-                parallaxItems.push({ el: el, speed: 0.012 + i * 0.004, max: 12, current: 0 });
-            });
             if (portraitFrame) {
                 parallaxItems.push({ el: portraitFrame, speed: 0.035, max: 40, current: 0 });
             }
