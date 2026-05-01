@@ -1449,6 +1449,11 @@
                 transition: none;
             }
 
+            /* Marquee is purely decorative — restore scrolling */
+            .marquee-track {
+                animation-duration: 32s !important;
+                animation-iteration-count: infinite !important;
+            }
         }
     </style>
 </head>
